@@ -1,12 +1,4 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Vector Maps init Js File
-*/
 
-// world map with line & markers
 
 var worldlinemap = new jsVectorMap({
     map: "world_merc",

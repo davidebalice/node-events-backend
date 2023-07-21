@@ -1,14 +1,5 @@
 
 
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Leaflet init js
-*/
-
-
 // leaflet-map
 var mymap = L.map('leaflet-map').setView([51.505, -0.09], 13);
 

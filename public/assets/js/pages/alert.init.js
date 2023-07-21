@@ -1,10 +1,3 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://themesbrand.com/
-Contact: themesbrand@gmail.com
-File: Alert init js
-*/
 
 var alertPlaceholder = document.getElementById('liveAlertPlaceholder')
 var alertTrigger = document.getElementById('liveAlertBtn')

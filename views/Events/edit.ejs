@@ -45,6 +45,53 @@
 
       <form method="post" action="/event/<%= formData._id %>">
         <div class="card-body">
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Type of event<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <select 
+                class="form-select" 
+                id="typeDateSelect"
+                name="typeDate"
+                style="max-width: 200px"
+              >
+                <option value="single" <%= formData && formData.typeDate === 'single' ? ' selected ' : '' %>>Single date</option>
+                <option value="range" <%= formData && formData.typeDate === 'range' ? ' selected ' : '' %>>Range date</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Start date<b style="color: red">*</b>
+            </label>
+            <div class="col-md-10">
+              <input
+                class="form-control"
+                style="max-width: 200px"
+                type="date"
+                value="<%= formattedStartDate %>"
+                name="startDate"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row" style="display:none" id="rangeDiv">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              End date<b style="color: red">*</b>
+            </label>
+            <div class="col-md-10">
+              <input
+                class="form-control"
+                style="max-width: 200px"
+                type="date"
+                value="<%= formattedEndDate %>"
+                name="endDate"
+              />
+            </div>
+          </div>
           
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
@@ -57,57 +104,6 @@
                 value="<%= formData && formData.name ? formData.name : '' %>"
                 name="name"
               />
-            </div>
-          </div>
-
-          <div class="mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-              Duration<b style="color:red">*</b>
-            </label>
-            <div class="col-md-10">
-              <input
-                class="form-control"
-                type="number"
-                value="<%= formData && formData.duration ? formData.duration : '' %>"
-                name="duration"
-              />
-            </div>
-          </div>
-
-          <div class="mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-              Max group size
-            </label>
-            <div class="col-md-10">
-              <input
-                class="form-control"
-                type="number"
-                value="<%= formData && formData.maxGroupSize ? formData.maxGroupSize : '' %>"
-                name="maxGroupSize"
-              />
-            </div>
-          </div>
-
-          <div class="mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-              Difficulty<b style="color:red">*</b>
-            </label>
-            <div class="col-md-10">
-              <select class="form-select" name="difficulty">
-                <option>- Select -</option>
-                <option value="easy" <%= formData && formData.difficulty === 'easy' ? ' selected ' : '' %>>Easy</option>
-                <option value="medium" <%= formData && formData.difficulty === 'medium' ? ' selected ' : '' %>>Medium</option>
-                <option value="difficult" <%= formData && formData.difficulty === 'difficult' ? ' selected ' : '' %>>Difficult</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-              Price €<b style="color:red">*</b>
-            </label>
-            <div class="col-md-10">
-              <input class="form-control" type="text" value="<%= formData && formData.price ? formData.price : '' %>" name="price" />
             </div>
           </div>
 
@@ -144,5 +140,20 @@
 
 <script src="/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
 <script src="/assets/js/pages/form-editor.init.js"></script>
+<script>
+  const typeDateSelect = document.getElementById("typeDateSelect");
+  const rangeDiv = document.getElementById("rangeDiv");
+  function handleTypeDateChange() {
+    const selectedValue = typeDateSelect.value;
 
+    if (selectedValue === "range") {
+      rangeDiv.style.display = "flex"; 
+    } else {
+      rangeDiv.style.display = "none"; 
+    }
+  }
+
+  typeDateSelect.addEventListener("change", handleTypeDateChange);
+  handleTypeDateChange();
+</script>
 <%- contentFor('FooterJs') %> <%- contentFor('BottomJs') %>

@@ -1,10 +1,4 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Form validation Js File
-*/
+
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {

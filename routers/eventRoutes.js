@@ -26,7 +26,7 @@ router
   .post(
     demoMode,
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin'),
     eventController.createEvent
   );
 
@@ -36,7 +36,7 @@ router
   .post(
     demoMode,
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin'),
     eventController.updateEvent
   );
 
@@ -46,7 +46,7 @@ router
   .post(
     demoMode,
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin'),
     eventController.uploadImage,
     eventController.resizeImage,
     eventController.updatePhoto
@@ -57,7 +57,7 @@ router
   .post(
     demoMode,
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin'),
     eventController.uploadGallery,
     eventController.resizeGallery,
     eventController.updateGallery
@@ -68,7 +68,7 @@ router
   .post(
     demoMode,
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin'),
     eventController.deleteEvent
   );
 
@@ -77,7 +77,7 @@ router
   .post(
     demoMode,
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin'),
     eventController.deleteGallery
   );
 
@@ -87,17 +87,9 @@ router
   .post(
     demoMode,
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin'),
     eventController.updateLocation
   );
 
-router
-  .route('/event/otherlocation/:id')
-  .post(
-    demoMode,
-    authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
-    eventController.updateOtherLocation
-  );
 
 module.exports = router;

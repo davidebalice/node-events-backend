@@ -1,14 +1,4 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: range slider init js
-*/
 
-/*********************
-  basic example
-**********************/
 
 var slider = document.getElementById('slider');
 
@@ -22,10 +12,6 @@ noUiSlider.create(slider, {
 });
 
 
-
-/*********************
-  Colorpicker
-**********************/
 
 var resultElement = document.getElementById('result');
 var sliders = document.getElementsByClassName('sliders');

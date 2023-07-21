@@ -1,10 +1,4 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: invoive list  Js File
-*/
+
 
 // Range datepicker
 flatpickr('#datepicker-range', {

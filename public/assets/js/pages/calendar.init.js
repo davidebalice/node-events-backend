@@ -1,10 +1,4 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Calendar init js
-*/
+
 
 document.addEventListener("DOMContentLoaded", function () {
 

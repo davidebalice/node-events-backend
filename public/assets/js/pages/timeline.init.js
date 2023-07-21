@@ -1,10 +1,4 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Timeline Init Js File
-*/
+
 
 var swiper = new Swiper(".slider", {
     slidesPerView: 1,

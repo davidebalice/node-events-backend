@@ -1,26 +1,15 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: coming soon Init Js File
-*/
+
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Set the date we're counting down to
     var countDownDate = new Date("Jan 1, 2022").getTime();
 
-    // Update the count down every 1 second
     var countDown = setInterval(function () {
 
-        // Get today's date and time
         var currentTime = new Date().getTime();
 
-        // Find the distance between currentTime and the count down date
         var distance = countDownDate - currentTime;
 
-        // Time calculations for days, hours, minutes and seconds
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));

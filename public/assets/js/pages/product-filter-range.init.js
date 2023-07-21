@@ -1,11 +1,4 @@
 
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: product range slider init js
-*/
 
 
 var slider = document.getElementById('priceslider');

@@ -16,14 +16,14 @@
     <div
       class="page-title-box d-flex align-items-center justify-content-between"
     >
-      <h4 class="mb-0">Locations</h4>
+      <h4 class="mb-0">Location</h4>
 
       <div class="page-title-right">
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">
             <a href="javascript:void(0);">Events</a>
           </li>
-          <li class="breadcrumb-item active">Locations</li>
+          <li class="breadcrumb-item active">Location</li>
         </ol>
       </div>
     </div>
@@ -53,8 +53,8 @@
           </button>
         </a>
 
-        <h4 class="card-title">Locations</h4>
-        <p class="card-title-desc">Change locations of event</p>
+        <h4 class="card-title">Location</h4>
+        <p class="card-title-desc">Change location of event</p>
       </div>
 
       <form method="post" action="/event/location/<%= formData._id %>">
@@ -70,21 +70,21 @@
 
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
-              Start location (name)<b style="color: red">*</b>
+              Location (name)<b style="color: red">*</b>
             </label>
             <div class="col-md-10">
               <input
                 class="form-control"
                 type="text"
                 name="name"
-                value="<%= formData && formData.startLocation ? formData.startLocation.description : '' %>"
+                value="<%= formData && formData.location ? formData.location.description : '' %>"
               />
             </div>
           </div>
 
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
-              Start location (coordinates)<b style="color: red">*</b>
+              Location (coordinates)<b style="color: red">*</b>
             </label>
             <div class="col-md-10">
               <input
@@ -92,7 +92,7 @@
                 type="text"
                 name="coordinates"
                 id="coordinates"
-                value="<%= formData && formData.startLocation ? formData.startLocation.coordinates : '' %>"
+                value="<%= formData && formData.location ? formData.location.coordinates : '' %>"
               />
             </div>
           </div>
@@ -114,106 +114,6 @@
           </div>
         </div>
       </form>
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <a href="/events" class="back-button">
-          <button
-            type="button"
-            class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
-          >
-            <i
-              class="mdi mdi-arrow-left-thick me-1"
-              style="font-size: 14px"
-            ></i>
-            Back
-          </button>
-        </a>
-
-        <h4 class="card-title">Other locations</h4>
-        <p class="card-title-desc">Change locations of event</p>
-      </div>
-
-      <% formData.locations.forEach(function(location) { %>
-      <form method="post" action="/event/otherlocation/<%= location._id %>">
-        <div class="card-body">
-          <div class="mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-              Location (name)<b style="color: red">*</b>
-            </label>
-            <div class="col-md-10">
-              <input
-                class="form-control"
-                type="text"
-                name="description"
-                value="<%= location && location.description ? location.description : '' %>"
-              />
-            </div>
-          </div>
-
-          <div class="mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-              Location (coordinates)<b style="color: red">*</b>
-            </label>
-            <div class="col-md-10">
-              <input
-                class="form-control"
-                type="text"
-                name="coordinates"
-                id="coordinates<%= location._id %>"
-                value="<%= location && location.coordinates ? location.coordinates : '' %>"
-              />
-            </div>
-          </div>
-
-          <div class="mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-              Open map
-            </label>
-            <div class="col-md-10 row">
-              <div
-                class="btn btn-small btn-info mapButton"
-                onclick="viewMap('<%= location._id %>')"
-                id="openMap<%= location._id %>"
-              >
-                <i class="mdi mdi-map me-1" style="font-size: 18px"></i>
-                View map
-              </div>
-              <div
-                class="btn btn-small btn-info d-none mapButton"
-                onclick="closeMap('<%= location._id %>')"
-                id="closeMap<%= location._id %>"
-              >
-                <i class="mdi mdi-map me-1" style="font-size: 18px"></i>
-                Close map
-              </div>
-            </div>
-          </div>
-
-          <div id="map<%= location._id %>" class="map2"></div>
-
-          <div class="mt-5 mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-            </label>
-            <div class="col-md-10">
-              <button type="submit" class="btn btn-primary align-items-center">
-                <i
-                  class="mdi mdi-content-save me-1"
-                  style="font-size: 18px"
-                ></i>
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-        <input type="hidden" name="idevent" value="<%= formData._id %>" />
-      </form>
-      <% }); %>
     </div>
   </div>
 </div>

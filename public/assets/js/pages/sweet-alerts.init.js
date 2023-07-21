@@ -1,10 +1,4 @@
-/*
-Template Name: Symox - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Sweetalert Js File
-*/
+
 
 //Basic
 document.getElementById("sa-basic").addEventListener("click", function() {
@@ -144,7 +138,7 @@ document.getElementById("custom-html-alert").addEventListener("click", function(
         title: '<i>HTML</i> <u>example</u>',
         icon: 'info',
         html: 'You can use <b>bold text</b>, ' +
-        '<a href="//Themesbrand.in/">links</a> ' +
+        '<a href="#">links</a> ' +
         'and other HTML tags',
         showCloseButton: true,
         showCancelButton: true,

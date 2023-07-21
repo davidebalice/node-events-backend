@@ -14,10 +14,6 @@ const eventSchema = new mongoose.Schema(
       minlength: ['6', 'min 6 characters'],
     },
     slug: { type: String, unique: true, trim: true },
-    duration: {
-      type: Number,
-      required: [true, 'Event must have a duration'],
-    },
     ratingsAverage: {
       type: Number,
       default: 4.0,
@@ -28,19 +24,6 @@ const eventSchema = new mongoose.Schema(
     ratingsQuantity: {
       type: Number,
       default: 0,
-    },
-    price: {
-      type: Number,
-      required: [true, 'Event must have a price'],
-    },
-    priceDiscout: {
-      type: Number,
-      validate: {
-        validator: function (val) {
-          return val < this.price;
-        },
-        message: 'discount price should be below price',
-      },
     },
     summary: {
       type: String,
@@ -61,7 +44,17 @@ const eventSchema = new mongoose.Schema(
       default: Date.now(),
       select: false,
     },
-    startDates: [Date],
+    typeDate: {
+      type: String,
+      required: [true, 'Select type of date'],
+    },
+    startDate: {
+      type: Date,
+      required: [true, 'Event must have a start date'],
+    },
+    endDate: {
+      type: Date,
+    },
     location: {
       type: {
         type: String,
@@ -72,19 +65,6 @@ const eventSchema = new mongoose.Schema(
       address: String,
       description: String,
     },
-    locations: [
-      {
-        type: {
-          type: String,
-          default: 'Point',
-          enum: ['Point'],
-        },
-        coordinates: [Number],
-        address: String,
-        description: String,
-        day: Number,
-      },
-    ],
     active: {
       type: Boolean,
       default: true,
@@ -97,7 +77,7 @@ const eventSchema = new mongoose.Schema(
   }
 );
 
-eventSchema.index({ price: 1, ratingsAverage: -1 });
+//eventSchema.index({ price: 1, ratingsAverage: -1 });
 eventSchema.index({ slug: 1 });
 eventSchema.index({ startLocation: '2dsphere' });
 
@@ -107,13 +87,11 @@ eventSchema.virtual('reviews', {
   localField: '_id',
 });
 
-//middleware before save, create, insert ecc.
 eventSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-//middleware after save, create, insert ecc.
 eventSchema.post('save', (doc, next) => {
   next();
 });

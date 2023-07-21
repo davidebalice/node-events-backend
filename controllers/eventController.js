@@ -107,7 +107,7 @@ exports.createEvent = catchAsync(async (req, res, next) => {
     req.body.startLocation = startLocation;
     req.body._id = new mongoose.Types.ObjectId();
     await Event.create(req.body);
-    res.redirect('/eventss?m=1');
+    res.redirect('/events?m=1');
   } catch (err) {
     res.render('Events/add', {
       status: 200,
@@ -138,11 +138,26 @@ exports.editEvent = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+
+  const startDateObj = new Date(doc.startDate);
+  const year = startDateObj.getFullYear();
+  const month = String(startDateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(startDateObj.getDate()).padStart(2, '0');
+  const formattedStartDate = `${year}-${month}-${day}`;
+
+  const endDateObj = new Date(doc.endDate);
+  const yearEnd = endDateObj.getFullYear();
+  const monthEnd = String(endDateObj.getMonth() + 1).padStart(2, '0');
+  const dayEnd = String(endDateObj.getDate()).padStart(2, '0');
+  const formattedEndDate = `${yearEnd}-${monthEnd}-${dayEnd}`;
+
   let message = '';
   res.render('Events/edit', {
     status: 200,
     title: 'Edit event',
     formData: doc,
+    formattedStartDate,
+    formattedEndDate,
     message: message,
   });
 });
@@ -253,17 +268,17 @@ exports.updateLocation = catchAsync(async (req, res, next) => {
   const longitude = coordinates[0];
   const latitude = coordinates[1];
 
-  const startLocation = {
+  const location = {
     type: 'Point',
     description: req.body.name,
     coordinates: [parseFloat(longitude), parseFloat(latitude)],
   };
 
-  req.body.startLocation = startLocation;
+  req.body.location = location;
 
   const doc = await Event.updateOne(
     { _id: req.params.id },
-    { $set: { startLocation: req.body.startLocation } }
+    { $set: { location: req.body.location } }
   );
 
   if (!doc) {
@@ -271,35 +286,4 @@ exports.updateLocation = catchAsync(async (req, res, next) => {
   }
 
   res.redirect('/event/location/' + req.params.id);
-});
-
-exports.updateOtherLocation = catchAsync(async (req, res, next) => {
-  const idevent = req.body.idevent;
-  const coordinates = req.body.coordinates.split(',');
-  const longitude = coordinates[0];
-  const latitude = coordinates[1];
-
-  const mod = await Event.updateOne(
-    {
-      _id: new ObjectId(idevent),
-      'locations._id': new ObjectId(req.params.id),
-    },
-    {
-      $set: {
-        'locations.$.description': req.body.description,
-        'locations.$.coordinates': [
-          parseFloat(longitude),
-          parseFloat(latitude),
-        ],
-      },
-    }
-  );
-
-  if (mod.nModified > 0) {
-    console.log('Descrizione della località aggiornata con successo');
-  } else {
-    console.log('Nessuna località trovata o nessuna modifica effettuata');
-  }
-
-  res.redirect('/event/location/' + idevent);
 });

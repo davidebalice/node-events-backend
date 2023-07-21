@@ -4,9 +4,6 @@ const mongoose = require('mongoose');
 const path = require('path');
 const http = require('http').Server(app);
 const validator = require('express-validator');
-const authController = require('./controllers/authController');
-const eventController = require('./controllers/eventController');
-const bookingController = require('./controllers/bookingController');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
@@ -93,12 +90,10 @@ app.use(expressLayouts);
 const eventRouter = require('./routers/eventRoutes');
 const userRouter = require('./routers/userRoutes');
 const reviewRouter = require('./routers/reviewRoutes');
-const bookingRouter = require('./routers/bookingRoutes');
 
 app.use('/', eventRouter);
 app.use('/', userRouter);
 app.use('/', reviewRouter);
-app.use('/', bookingRouter);
 
 http.listen(8000, function () {
   console.log('listening on *:8000');
