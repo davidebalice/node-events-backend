@@ -1,0 +1,148 @@
+<%- contentFor('HeaderCss') %> <%- contentFor('breadcrumb') %>
+
+<div class="row">
+  <div class="col-12">
+    <div
+      class="page-title-box d-flex align-items-center justify-content-between"
+    >
+      <h4 class="mb-0">Edit event</h4>
+
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item">
+            <a href="javascript:void(0);">Events</a>
+          </li>
+          <li class="breadcrumb-item active">Edit event</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- contentFor('body') %> <% if (message && message.length > 0) { %>
+<ul class="errors">
+  <%= message %>
+</ul>
+<% } %>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <a href="/events" class="back-button">
+          <button
+            type="button"
+            class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+          >
+            <i
+              class="mdi mdi-arrow-left-thick me-1"
+              style="font-size: 14px"
+            ></i>
+            Back
+          </button>
+        </a>
+      </div>
+
+      <form method="post" action="/event/<%= formData._id %>">
+        <div class="card-body">
+          
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Event title<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <input
+                class="form-control"
+                type="text"
+                value="<%= formData && formData.name ? formData.name : '' %>"
+                name="name"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Duration<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <input
+                class="form-control"
+                type="number"
+                value="<%= formData && formData.duration ? formData.duration : '' %>"
+                name="duration"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Max group size
+            </label>
+            <div class="col-md-10">
+              <input
+                class="form-control"
+                type="number"
+                value="<%= formData && formData.maxGroupSize ? formData.maxGroupSize : '' %>"
+                name="maxGroupSize"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Difficulty<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <select class="form-select" name="difficulty">
+                <option>- Select -</option>
+                <option value="easy" <%= formData && formData.difficulty === 'easy' ? ' selected ' : '' %>>Easy</option>
+                <option value="medium" <%= formData && formData.difficulty === 'medium' ? ' selected ' : '' %>>Medium</option>
+                <option value="difficult" <%= formData && formData.difficulty === 'difficult' ? ' selected ' : '' %>>Difficult</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Price €<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <input class="form-control" type="text" value="<%= formData && formData.price ? formData.price : '' %>" name="price" />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Short description<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <textarea id="ckeditor-classic-short" name="summary"><%= formData && formData.summary ? formData.summary : '' %></textarea>
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Long description<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <textarea id="ckeditor-classic" name="description"><%= formData && formData.description ? formData.description : '' %></textarea>
+            </div>
+          </div>
+
+          <div class="mt-4 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+            </label>
+            <div class="col-md-10">
+              <button type="submit" class="btn btn-primary w-md">Save</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+<script src="/assets/js/pages/form-editor.init.js"></script>
+
+<%- contentFor('FooterJs') %> <%- contentFor('BottomJs') %>
