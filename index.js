@@ -8,8 +8,15 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE;
-
+const cors = require('cors');
 const collectionName = 'users';
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200,
+  })
+);
 
 mongoose
   .connect(DB, {
@@ -90,7 +97,9 @@ app.use(expressLayouts);
 const eventRouter = require('./routers/eventRoutes');
 const userRouter = require('./routers/userRoutes');
 const reviewRouter = require('./routers/reviewRoutes');
+const eventApiRouter = require('./routers/eventApiRoutes');
 
+app.use('/api/v1/', eventApiRouter);
 app.use('/', eventRouter);
 app.use('/', userRouter);
 app.use('/', reviewRouter);
