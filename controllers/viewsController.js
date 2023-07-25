@@ -82,3 +82,12 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
     user: updatedUser,
   });
 });
+
+function paginateData(totalResults, currentPage, limit) {
+  const totalPages = Math.ceil(totalResults / limit);
+  return {
+    totalPages,
+    currentPage,
+    limit,
+  };
+}

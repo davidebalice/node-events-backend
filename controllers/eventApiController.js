@@ -38,9 +38,7 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
       status: 'success',
       requestedAt: req.requestTime,
       results: events.length,
-      data: {
-        events: events,
-      },
+      events: events,
     });
   } else {
     return res.status(404).json({

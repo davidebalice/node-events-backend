@@ -4,6 +4,18 @@ const deleteEvent = (id) => {
   }
 };
 
+const deleteCategory = (id) => {
+  if (confirm('Delete this category?')) {
+    document.getElementById('deleteForm' + id).submit();
+  }
+};
+
+const deleteSubcategory = (id) => {
+  if (confirm('Delete this subcategory?')) {
+    document.getElementById('deleteForm' + id).submit();
+  }
+};
+
 const deleteUser = (id) => {
   if (confirm('Delete this user?')) {
     document.getElementById('deleteForm' + id).submit();

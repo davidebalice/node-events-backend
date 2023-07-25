@@ -4,10 +4,7 @@ class ApiQuery {
     this.queryString = queryString;
   }
 
-
-
   filter() {
-    // eslint-disable-next-line node/no-unsupported-features/es-syntax
     const queryObj = { ...this.queryString };
     const expludeFields = ['sort', 'page', 'limit', 'fields'];
     expludeFields.forEach((el) => delete queryObj[el]);

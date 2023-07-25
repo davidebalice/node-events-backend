@@ -2,6 +2,7 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const sharp = require('sharp');
 const Event = require('../models/eventModel');
+const Category = require('../models/categoryModel');
 const ApiQuery = require('../utils/apiquery');
 const AppError = require('../utils/error');
 const catchAsync = require('../utils/catchAsync');
@@ -10,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const { ObjectId } = require('mongodb');
 const multerStorage = multer.memoryStorage();
+const { parseISO, format, startOfMonth, endOfMonth } = require('date-fns');
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) {
@@ -65,8 +67,9 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
     const regex = new RegExp(req.query.key, 'i');
     filterData = { name: { $regex: regex } };
   }
+  const setLimit = 20;
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 10;
+  const limit = req.query.limit * 1 || setLimit;
   const skip = (page - 1) * limit;
   const events = await Event.find(filterData)
     .sort('-createdAt')
@@ -85,6 +88,7 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
   res.render('Events/events', {
     title: 'Events',
     events,
+    currentPage: page,
     page,
     limit,
     totalPages,
@@ -94,8 +98,6 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
 
 exports.createEvent = catchAsync(async (req, res, next) => {
   try {
-    //const latitude = req.body.latitude;
-    //const longitude = req.body.longitude;
     const latitude = 40.414141;
     const longitude = 35.752727;
 
@@ -109,11 +111,13 @@ exports.createEvent = catchAsync(async (req, res, next) => {
     await Event.create(req.body);
     res.redirect('/events?m=1');
   } catch (err) {
+    const categories = await Category.find({});
     res.render('Events/add', {
       status: 200,
       title: 'Add event',
       formData: req.body,
       message: err.message,
+      categories: categories,
     });
   }
 });
@@ -167,12 +171,40 @@ exports.updateEvent = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
-
   res.redirect(doc._id);
+});
+
+exports.updateDateForDemo = catchAsync(async (req, res, next) => {
+  const eventArray = await Event.find();
+
+  // Ottieni il mese attuale come oggetto Date
+  const currentDate = new Date();
+
+  // Ottieni l'inizio e la fine del mese attuale
+  const startOfMonthDate = startOfMonth(currentDate);
+  const endOfMonthDate = endOfMonth(currentDate);
+
+  // Itera attraverso l'array degli eventi e aggiorna le date al mese attuale
+  eventArray.forEach((event) => {
+    const eventDate = new Date(event.startDate);
+
+    // Se la data dell'evento è compresa nel mese attuale, aggiorna la data al mese attuale
+    if (eventDate >= startOfMonthDate && eventDate <= endOfMonthDate) {
+      // Imposta la data dell'evento con l'inizio del mese attuale
+      event.startDate = startOfMonthDate;
+    }
+  });
+
+  // Ora puoi salvare 'eventArray' nel tuo database
+  await Promise.all(eventArray.map((event) => event.save()));
+
+  // Invia una risposta di successo (o un messaggio appropriato) al client
+  res.status(200).json({
+    message: 'Date degli eventi aggiornate con successo al mese attuale.',
+  });
 });
 
 exports.photoEvent = catchAsync(async (req, res, next) => {

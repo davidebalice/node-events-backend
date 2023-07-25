@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator');
-//const ObjectId = require('mongodb').ObjectID;
 
 const eventSchema = new mongoose.Schema(
   {
@@ -13,6 +11,12 @@ const eventSchema = new mongoose.Schema(
       maxlength: ['40', 'max 40 characters'],
       minlength: ['6', 'min 6 characters'],
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+    },
+    subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Subcategory' },
     slug: { type: String, unique: true, trim: true },
     ratingsAverage: {
       type: Number,
@@ -77,7 +81,6 @@ const eventSchema = new mongoose.Schema(
   }
 );
 
-//eventSchema.index({ price: 1, ratingsAverage: -1 });
 eventSchema.index({ slug: 1 });
 eventSchema.index({ startLocation: '2dsphere' });
 

@@ -97,6 +97,25 @@
 
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
+              Category<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <select 
+                class="form-select" 
+                id="categorySelect"
+                name="category"
+                style="max-width: 200px"
+              >
+              <option value=""> - Select - </option>
+              <% for (let category of categories) { %>
+                <option value="<%= category.id %>"><%= category.name %></option>
+              <% } %>
+              </select>
+            </div>
+          </div>
+          
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
               Event title<b style="color: red">*</b>
             </label>
             <div class="col-md-10">

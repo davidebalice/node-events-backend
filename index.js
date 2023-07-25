@@ -47,7 +47,6 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
 var i18n = require('i18n-express');
-//app.use(bodyParser.json());
 var urlencodeParser = bodyParser.urlencoded({ extended: true });
 app.use(cookieParser());
 app.use(
@@ -55,6 +54,7 @@ app.use(
     extended: true,
   })
 );
+app.use(bodyParser.json());
 
 app.use(
   session({
@@ -97,12 +97,14 @@ app.use(expressLayouts);
 const eventRouter = require('./routers/eventRoutes');
 const userRouter = require('./routers/userRoutes');
 const reviewRouter = require('./routers/reviewRoutes');
+const categoryRouter = require('./routers/categoryRoutes');
 const eventApiRouter = require('./routers/eventApiRoutes');
 
 app.use('/api/v1/', eventApiRouter);
 app.use('/', eventRouter);
 app.use('/', userRouter);
 app.use('/', reviewRouter);
+app.use('/', categoryRouter);
 
 http.listen(8000, function () {
   console.log('listening on *:8000');

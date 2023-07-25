@@ -5,14 +5,14 @@
     <div
       class="page-title-box d-flex align-items-center justify-content-between"
     >
-      <h4 class="mb-0">Events</h4>
+      <h4 class="mb-0">Categories</h4>
 
       <div class="page-title-right">
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">
-            <a href="javascript: void(0);">Events</a>
+            <a href="javascript: void(0);">Categories</a>
           </li>
-          <li class="breadcrumb-item active">Events</li>
+          <li class="breadcrumb-item active">Categories</li>
         </ol>
       </div>
     </div>
@@ -32,12 +32,12 @@
         <div class="row mb-2">
           <div class="col-sm-8">
             <div class="text-sm-start">
-              <a href="/add/event">
+              <a href="/add/category">
                 <button
                   type="button"
                   class="btn btn-success waves-effect waves-light mb-2 me-2"
                 >
-                  <i class="mdi mdi-plus me-1"></i> New event
+                  <i class="mdi mdi-plus me-1"></i> New category
                 </button>
               </a>
             </div>
@@ -47,7 +47,7 @@
               <div class="position-relative">
                 <form
                   method="get"
-                  action="/events"
+                  action="/categories"
                   class="row flex-row flex-nowrap"
                 >
                   <input
@@ -84,7 +84,7 @@
                   </div>
                 </th>
                 <th class="align-middle" style="width: 7%">Image</th>
-                <th class="align-middle" style="width: 15%">Event name</th>
+                <th class="align-middle" style="width: 15%">Category</th>
                 <th class="align-middle" style="width: 10%">Price</th>
                 <th class="align-middle" style="width: 10%">Difficulty</th>
                 <th class="align-middle" style="width: 30%">Location</th>
@@ -92,8 +92,8 @@
               </tr>
             </thead>
             <tbody>
-              <%- contentFor('body') %> <% if (events.length > 0) { %> <%
-              events.forEach(function(events) { %>
+              <%- contentFor('body') %> <% if (categories.length > 0) { %> <%
+              categories.forEach(function(category) { %>
               <tr>
                 <td>
                   <div class="form-check font-size-16">
@@ -110,26 +110,24 @@
                 </td>
                 <td>
                   <a
-                    href="/event/photo/<%= events._id %>"
+                    href="/category/photo/<%= category._id %>"
                     data-toggle="tooltip"
                     data-placement="top"
                     title="Photo"
                   >
                     <img
-                      src="<%= process.env.NODE_URL %>/img/events/<%= events.imageCover %>"
+                      src="<%= process.env.NODE_URL %>/img/categories/<%= category.imageCover %>"
                       style="width: 120px; height: auto"
                       onerror="this.onerror=null;this.src='/placeholder.jpg';"
                   /></a>
                 </td>
-                <td><b><%= events.name %></b></td>
+                <td><b><%= category.name %></b></td>
                 <td>fgdggdfgdfg</td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-primary btn-sm btn-rounded"
-                  >
-                    <%= events.difficulty %>
-                  </button>
+                  ></button>
                 </td>
                 <td>
                   <ul>
@@ -141,7 +139,7 @@
                     <ul class="list-inline mb-0">
                       <li class="list-inline-item">
                         <a
-                          href="/event/<%= events._id %>"
+                          href="/category/<%= category._id %>"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -152,7 +150,7 @@
 
                       <li class="list-inline-item">
                         <a
-                          href="/event/photo/<%= events._id %>"
+                          href="/category/photo/<%= category._id %>"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -162,25 +160,70 @@
                       </li>
 
                       <li class="list-inline-item">
+                        <% if(category.order===1){ %>
                         <a
-                          href="/event/location/<%= events._id %>"
+                          href="#"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
-                          title="Locations"
-                          ><i class="mdi mdi-map-marker font-size-22 green"></i
+                          title="Move top"
+                          ><i
+                            class="mdi mdi-arrow-up font-size-22"
+                            style="color: #d1d1d1"
+                          ></i
                         ></a>
+                        <% } else { %>
+                        <a
+                          href="#"
+                          onclick="moveCategory('<%= category._id %>', 'up')"
+                          class="px-2 text-primary"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Move top"
+                          ><i class="mdi mdi-arrow-up font-size-22"></i
+                        ></a>
+                        <% } %>
+                      </li>
+
+                      <li class="list-inline-item">
+                        <% if(category.order===categories.length){ %>
+
+                        <a
+                          href="#"
+                          class="px-2 text-primary"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Move down"
+                          ><i
+                            class="mdi mdi-arrow-down font-size-22"
+                            style="color: #d1d1d1"
+                          ></i
+                        ></a>
+
+                        <% } else { %>
+
+                        <a
+                          href="#"
+                          onclick="moveCategory('<%= category._id %>', 'down')"
+                          class="px-2 text-primary"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Move down"
+                          ><i class="mdi mdi-arrow-down font-size-22"></i
+                        ></a>
+
+                        <% } %>
                       </li>
 
                       <li class="list-inline-item">
                         <form
-                          id="deleteForm<%= events._id %>"
+                          id="deleteForm<%= category._id %>"
                           method="post"
-                          action="/event/delete/<%= events._id %>"
+                          action="/category/delete/<%= category._id %>"
                         >
                           <a
-                            href="javascript:deleteEvent('<%= events._id %>')"
-                            id="deleteLink<%= events._id %>"
+                            href="javascript:deleteCategory('<%= category._id %>')"
+                            id="deleteLink<%= category._id %>"
                             data-toggle="tooltip"
                             data-placement="top"
                             title="Delete"
@@ -196,7 +239,7 @@
               <tr>
                 <td colspan="10">
                   <br /><br />
-                  <b>Events not found</b>
+                  <b>Categories not found</b>
                   <br /><br /><br />
                 </td>
               </tr>
@@ -214,10 +257,6 @@
 <%- contentFor('FooterJs') %> <%- contentFor('BottomJs') %>
 
 <script>
-  function changePage(page, limit) {
-    window.location.href = `/events?page=${page}&limit=${limit}`;
-  }
-
   document.addEventListener('load', function () {
     $(function () {
       $('[data-toggle="tooltip"]').tooltip();
@@ -245,4 +284,30 @@
         .catch((error) => console.error(error));
     });
   });
+
+  function changePage(page, limit) {
+    window.location.href = `/categories?page=${page}&limit=${limit}`;
+  }
+
+  async function moveCategory(categoryId, direction) {
+    try {
+      const response = await fetch(`/move/category`, {
+        method: 'POST',
+        mode: 'same-origin',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          categoryId,
+          direction,
+        }),
+      });
+      if (response.ok) {
+        window.location.href = '/categories';
+      }
+    } catch (error) {
+      console.error('Errore durante la richiesta HTTP:', error);
+    }
+  }
 </script>

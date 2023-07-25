@@ -173,7 +173,7 @@ capitalizeFirstLetter(str) { return str.charAt(0).toUpperCase() + str.slice(1);
 <%- contentFor('FooterJs') %> <%- contentFor('BottomJs') %>
 
 <script>
-  window.addEventListener('load', function () {
+  document.addEventListener('load', function () {
     $(function () {
       $('[data-toggle="tooltip"]').tooltip();
     });

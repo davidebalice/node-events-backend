@@ -5,6 +5,7 @@ const authController = require('../controllers/authController');
 const reviewRouter = require('./reviewRoutes');
 const demoMode = require('../utils/demo_mode');
 const User = require('../models/userModel');
+const Category = require('../models/categoryModel');
 
 router.use('/:eventId/reviews', reviewRouter);
 
@@ -14,15 +15,21 @@ router.route('/').get(authController.protect, async function (req, res) {
   res.render('Dashboard/index', { users: users });
 });
 
-router.route('/events').get(authController.protect, eventController.getAllEvents);
-
-router.route('/add/event').get(authController.protect, function (req, res) {
-  res.locals = { title: 'Add event' };
-  res.render('Events/add', { formData: '', message: '' });
-});
+router
+  .route('/events')
+  .get(authController.protect, eventController.getAllEvents);
 
 router
   .route('/add/event')
+  .get(authController.protect, async function (req, res) {
+    const categories = await Category.find({});
+    res.locals = { title: 'Add event' };
+    res.render('Events/add', {
+      formData: '',
+      message: '',
+      categories: categories,
+    });
+  })
   .post(
     demoMode,
     authController.protect,
@@ -90,6 +97,5 @@ router
     authController.restrictTo('admin'),
     eventController.updateLocation
   );
-
 
 module.exports = router;
