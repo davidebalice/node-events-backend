@@ -21,15 +21,7 @@ router
 
 router
   .route('/add/event')
-  .get(authController.protect, async function (req, res) {
-    const categories = await Category.find({});
-    res.locals = { title: 'Add event' };
-    res.render('Events/add', {
-      formData: '',
-      message: '',
-      categories: categories,
-    });
-  })
+  .get(authController.protect, eventController.addEvent)
   .post(
     demoMode,
     authController.protect,

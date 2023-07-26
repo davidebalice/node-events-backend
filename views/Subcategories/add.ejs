@@ -5,14 +5,14 @@
     <div
       class="page-title-box d-flex align-items-center justify-content-between"
     >
-      <h4 class="mb-0">Edit category</h4>
+      <h4 class="mb-0">Add subcategory</h4>
 
       <div class="page-title-right">
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">
-            <a href="javascript:void(0);">Categories</a>
+            <a href="javascript:void(0);">Subcategories</a>
           </li>
-          <li class="breadcrumb-item active">Edit category</li>
+          <li class="breadcrumb-item active">Add subcategory</li>
         </ol>
       </div>
     </div>
@@ -29,10 +29,10 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <a href="/categories" class="back-button">
+        <a href="/subcategories" class="back-button">
           <button
             type="button"
-            class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+            class="btn btn-success waves-effect waves-light mb-2 me-2"
           >
             <i
               class="mdi mdi-arrow-left-thick me-1"
@@ -41,13 +41,16 @@
             Back
           </button>
         </a>
+
+        <h4 class="card-title">New subcategory</h4>
+        <p class="card-title-desc">Add a new subcategory</p>
       </div>
 
-      <form method="post" action="/category/<%= formData._id %>">
+      <form method="post" action="/add/subcategory">
         <div class="card-body">
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
-              Category<b style="color: red">*</b>
+              Subcategory<b style="color: red">*</b>
             </label>
             <div class="col-md-10">
               <input
@@ -61,7 +64,26 @@
 
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
-              Description<b style="color: red">*</b>
+              Category<b style="color: red">*</b>
+            </label>
+            <div class="col-md-10">
+              <select
+                class="form-select"
+                id="categorySelect"
+                name="category"
+                style="max-width: 200px"
+              >
+                <option value="">- Select -</option>
+                <% for (let category of categories) { %>
+                <option value="<%= category.id %>"><%= category.name %></option>
+                <% } %>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Description
             </label>
             <div class="col-md-10">
               <textarea id="ckeditor-classic" name="description">
@@ -74,7 +96,10 @@
             <label for="example-text-input" class="col-md-2 col-form-label">
             </label>
             <div class="col-md-10">
-              <button type="submit" class="btn btn-primary w-md">Save</button>
+              <button type="submit" class="btn btn-primary w-md">
+                <i class="mdi mdi-plus bold me-1" style="font-size: 14px"></i>
+                Add subcategory
+              </button>
             </div>
           </div>
         </div>
@@ -85,5 +110,4 @@
 
 <script src="/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
 <script src="/assets/js/pages/form-editor.init.js"></script>
-
 <%- contentFor('FooterJs') %> <%- contentFor('BottomJs') %>

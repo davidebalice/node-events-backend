@@ -1,0 +1,111 @@
+[{
+  "_id": {
+    "$oid": "64ba391e9d335f26e56bdb2f"
+  },
+  "name": "ddADASDASDASDASd",
+  "ratingsAverage": 4,
+  "ratingsQuantity": 0,
+  "summary": "<p>aSDFsdfgsedfgs</p>",
+  "description": "<p>dsds</p>",
+  "images": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1689925903861"
+    }
+  },
+  "typeDate": "single",
+  "startDate": {
+    "$date": {
+      "$numberLong": "1689292800000"
+    }
+  },
+  "endDate": null,
+  "location": {
+    "type": "Point",
+    "coordinates": []
+  },
+  "active": true,
+  "slug": "ddadasdasdasdasd",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64ba4428fdc3b07f2df11ff7"
+  },
+  "name": "gergergergergergergrger",
+  "ratingsAverage": 4,
+  "ratingsQuantity": 0,
+  "summary": "<p>ergerg</p>",
+  "description": "<p>ergerg</p>",
+  "images": [
+    "event-64ba4428fdc3b07f2df11ff7-1689929686740-1.jpeg",
+    "event-64ba4428fdc3b07f2df11ff7-1689929686740-2.jpeg",
+    "event-64ba4428fdc3b07f2df11ff7-1689929686742-4.jpeg"
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1689928613720"
+    }
+  },
+  "typeDate": "single",
+  "startDate": {
+    "$date": {
+      "$numberLong": "1692921600000"
+    }
+  },
+  "endDate": {
+    "$date": {
+      "$numberLong": "0"
+    }
+  },
+  "location": {
+    "type": "Point",
+    "description": "34534534534",
+    "coordinates": [
+      -73.91261621093751,
+      40.73842818812648
+    ]
+  },
+  "active": true,
+  "slug": "gergergergergergergrger",
+  "__v": 0,
+  "imageCover": "event-64ba4428fdc3b07f2df11ff7-1689929679276-cover.jpeg",
+  "category": {
+    "$oid": "64bfa37e85896cb9872e8c6f"
+  }
+},{
+  "_id": {
+    "$oid": "64ba47f7342f38d5b438bc1a"
+  },
+  "name": "range event1",
+  "ratingsAverage": 4,
+  "ratingsQuantity": 0,
+  "summary": "<p>frggergergergerg2</p>",
+  "description": "<p>ergergerg3</p>",
+  "images": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1689929594367"
+    }
+  },
+  "typeDate": "range",
+  "startDate": {
+    "$date": {
+      "$numberLong": "1690156800000"
+    }
+  },
+  "endDate": {
+    "$date": {
+      "$numberLong": "1690761600000"
+    }
+  },
+  "location": {
+    "type": "Point",
+    "coordinates": []
+  },
+  "active": true,
+  "slug": "range-event",
+  "__v": 0,
+  "category": {
+    "$oid": "64bfe0222e5cae8de2bb6285"
+  }
+}]

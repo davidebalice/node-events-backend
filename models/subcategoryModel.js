@@ -14,10 +14,6 @@ const subcategorySchema = new mongoose.Schema(
       required: [true, 'Subategory must have a category'],
     },
     slug: { type: String, unique: true, trim: true },
-    imageCover: {
-      type: String,
-      trim: true,
-    },
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -28,7 +24,7 @@ const subcategorySchema = new mongoose.Schema(
       default: true,
       select: false,
     },
-    order: { type: Number, required: true },
+    order: { type: Number, required: true, default: 1 },
   },
   {
     toJSON: { virtuals: true },
@@ -48,6 +44,6 @@ subcategorySchema.post('save', (doc, next) => {
   next();
 });
 
-const Subcategory = mongoose.model('Category', subcategorySchema);
+const Subcategory = mongoose.model('Subcategory', subcategorySchema);
 
 module.exports = Subcategory;

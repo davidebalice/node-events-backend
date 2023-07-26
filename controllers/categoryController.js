@@ -25,7 +25,6 @@ const upload = multer({
 });
 
 exports.uploadImage = upload.fields([{ name: 'imageCover', maxCount: 1 }]);
-exports.uploadGallery = upload.fields([{ name: 'images', maxCount: 6 }]);
 
 exports.resizeImage = catchAsync(async (req, res, next) => {
   console.log(req.files.imageCover);
@@ -86,6 +85,11 @@ exports.getAllCategories = catchAsync(async (req, res, next) => {
   }
 });
 
+exports.addCategory = catchAsync(async (req, res, next) => {
+  res.locals = { title: 'Add category' };
+  res.render('Categories/add', { formData: '', message: '' });
+});
+
 exports.createCategory = catchAsync(async (req, res, next) => {
   try {
     await Category.create(req.body);
@@ -120,25 +124,11 @@ exports.editCategory = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  const startDateObj = new Date(doc.startDate);
-  const year = startDateObj.getFullYear();
-  const month = String(startDateObj.getMonth() + 1).padStart(2, '0');
-  const day = String(startDateObj.getDate()).padStart(2, '0');
-  const formattedStartDate = `${year}-${month}-${day}`;
-
-  const endDateObj = new Date(doc.endDate);
-  const yearEnd = endDateObj.getFullYear();
-  const monthEnd = String(endDateObj.getMonth() + 1).padStart(2, '0');
-  const dayEnd = String(endDateObj.getDate()).padStart(2, '0');
-  const formattedEndDate = `${yearEnd}-${monthEnd}-${dayEnd}`;
-
   let message = '';
   res.render('Categories/edit', {
     status: 200,
     title: 'Edit category',
     formData: doc,
-    formattedStartDate,
-    formattedEndDate,
     message: message,
   });
 });

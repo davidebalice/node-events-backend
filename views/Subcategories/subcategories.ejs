@@ -5,14 +5,14 @@
     <div
       class="page-title-box d-flex align-items-center justify-content-between"
     >
-      <h4 class="mb-0">Categories</h4>
+      <h4 class="mb-0">Subcategories</h4>
 
       <div class="page-title-right">
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">
-            <a href="javascript: void(0);">Categories</a>
+            <a href="javascript: void(0);">Subcategories</a>
           </li>
-          <li class="breadcrumb-item active">Categories</li>
+          <li class="breadcrumb-item active">Subcategories</li>
         </ol>
       </div>
     </div>
@@ -29,42 +29,53 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <div class="row mb-2">
-          <div class="col-sm-8">
+        <div class="row mb-2 justify-content-between">
+          <div class="col-auto">
             <div class="text-sm-start">
-              <a href="/add/category">
+              <a href="/add/subcategory">
                 <button
                   type="button"
                   class="btn btn-success waves-effect waves-light mb-2 me-2"
                 >
-                  <i class="mdi mdi-plus me-1"></i> New category
+                  <i class="mdi mdi-plus me-1"></i> New subcategory
                 </button>
               </a>
             </div>
           </div>
-          <div class="col-sm-4">
-            <div class="search-box me-2 mb-2 d-inline-block">
-              <div class="position-relative">
+          <div class="col-auto">
+            <div class="search-box me-2 mb-2">
                 <form
                   method="get"
-                  action="/categories"
-                  class="row flex-row flex-nowrap"
+                  action="/subcategories"
+                  class="row flex-row flex-nowrap justify-content-center"
                 >
-                  <input
+                <select 
+                  class="form-select me-2" 
+                  id="categorySelect"
+                  name="category"
+                  style="max-width: 180px;height: 42px;"
+                >
+                <option value=""> - Select category - </option>
+                <% for (let category of categories) { %>
+                  <option value="<%= category._id %>" <%= queryCat === category._id.toString() ? 'selected' : '' %>><%= category.name%></option>
+                <% } %>
+                </select>
+                <input
                     type="text"
-                    class="form-control col-8 inputSearch"
+                    class="form-select" 
                     id="inputSearch"
                     name="key"
                     placeholder="Search..."
-                    style="height: 40px"
+                    style="max-width: 180px;height: 42px"
+                    value="<%= queryKey || '' %>"
                   />
                   <input
                     type="submit"
                     value="search"
-                    class="btn btn-success waves-effect waves-light mb-2 me-2 col-4 ms-2"
+                    class="btn btn-success waves-effect waves-light ms-2 me-3"
+                    style="max-width:100px"
                   />
                 </form>
-              </div>
             </div>
           </div>
         </div>
@@ -83,16 +94,19 @@
                     <label class="form-check-label" for="checkAll"></label>
                   </div>
                 </th>
-                <th class="align-middle" style="width: 10%">Image</th>
-                <th class="align-middle" style="width: 60%">Category</th>
+                <th class="align-middle" style="width: 30%">Subcategory</th>
+                <th class="align-middle" style="width: 30%">Category</th>
                 <th class="align-middle">Action</th>
               </tr>
             </thead>
             <tbody>
-              <%- contentFor('body') %> <% if (categories.length > 0) { %> <%
-              categories.forEach(function(category) { %>
+              <%- contentFor('body') %> <% if (subcategories.length > 0) { %> <%
+              subcategories.forEach(function(subcategory) { %>
               <tr>
                 <td>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input activeSwtich" type="checkbox" role="switch" data-item-id="active_<%= subcategory._id %>" id="active_<%= subcategory._id %>">
+                  </div>
                   <div class="form-check font-size-16">
                     <input
                       class="form-check-input"
@@ -105,29 +119,16 @@
                     ></label>
                   </div>
                 </td>
-                <td>
-                  <a
-                    href="/category/photo/<%= category._id %>"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Photo"
-                  >
-                    <img
-                      src="<%= process.env.NODE_URL %>/img/categories/<%= category.imageCover %>"
-                      style="width: 120px; height: auto"
-                      onerror="this.onerror=null;this.src='/placeholder.jpg';"
-                  /></a>
-                </td>
-                <td><b><%= category.name %></b></td>
-               
-              
-               
+
+                <td><b><%= subcategory.name %></b></td>
+                <td><b><%= subcategory.category.name %></b></td>
+
                 <td>
                   <div class="d-flex gap-1">
                     <ul class="list-inline mb-0">
                       <li class="list-inline-item">
                         <a
-                          href="/category/<%= category._id %>"
+                          href="/subcategory/<%= subcategory._id %>"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -137,18 +138,7 @@
                       </li>
 
                       <li class="list-inline-item">
-                        <a
-                          href="/category/photo/<%= category._id %>"
-                          class="px-2 text-primary"
-                          data-toggle="tooltip"
-                          data-placement="top"
-                          title="Photo"
-                          ><i class="mdi mdi-camera font-size-22"></i
-                        ></a>
-                      </li>
-
-                      <li class="list-inline-item">
-                        <% if(category.order===1){ %>
+                        <% if(subcategory.order===1){ %>
                         <a
                           href="#"
                           class="px-2 text-primary"
@@ -163,7 +153,7 @@
                         <% } else { %>
                         <a
                           href="#"
-                          onclick="moveCategory('<%= category._id %>', 'up')"
+                          onclick="moveSubcategory('<%= subcategory._id %>', 'up')"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -174,7 +164,7 @@
                       </li>
 
                       <li class="list-inline-item">
-                        <% if(category.order===categories.length){ %>
+                        <% if(subcategory.order===subcategories.length){ %>
 
                         <a
                           href="#"
@@ -192,7 +182,7 @@
 
                         <a
                           href="#"
-                          onclick="moveCategory('<%= category._id %>', 'down')"
+                          onclick="moveSubcategory('<%= subcategory._id %>', 'down')"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -205,13 +195,13 @@
 
                       <li class="list-inline-item">
                         <form
-                          id="deleteForm<%= category._id %>"
+                          id="deleteForm<%= subcategory._id %>"
                           method="post"
-                          action="/category/delete/<%= category._id %>"
+                          action="/subcategory/delete/<%= subcategory._id %>"
                         >
                           <a
-                            href="javascript:deleteCategory('<%= category._id %>')"
-                            id="deleteLink<%= category._id %>"
+                            href="javascript:deleteSubcategory('<%= subcategory._id %>')"
+                            id="deleteLink<%= subcategory._id %>"
                             data-toggle="tooltip"
                             data-placement="top"
                             title="Delete"
@@ -227,7 +217,7 @@
               <tr>
                 <td colspan="10">
                   <br /><br />
-                  <b>Categories not found</b>
+                  <b>Subctegories not found</b>
                   <br /><br /><br />
                 </td>
               </tr>
@@ -277,9 +267,9 @@
     window.location.href = `/categories?page=${page}&limit=${limit}`;
   }
 
-  async function moveCategory(categoryId, direction) {
+  async function moveSubcategory(subcategoryId, direction) {
     try {
-      const response = await fetch(`/move/category`, {
+      const response = await fetch(`/move/subcategory`, {
         method: 'POST',
         mode: 'same-origin',
         credentials: 'same-origin',
@@ -287,15 +277,59 @@
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          categoryId,
+          subcategoryId,
           direction,
         }),
       });
       if (response.ok) {
-        window.location.href = '/categories';
+        window.location.href = '/subcategories';
       }
     } catch (error) {
       console.error('Errore durante la richiesta HTTP:', error);
     }
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+  function initializeSwitches() {
+    const switches = document.querySelectorAll('[id^="active_"]');
+
+    switches.forEach(switchItem => {
+      const itemId = switchItem.dataset.itemId;
+      //const isActive = JSON.parse(switchItem.dataset.active);
+
+
+      switchItem.addEventListener('change', function(event) {
+        const state = event.target.checked;
+        toggleActive(itemId, state);
+      });
+    });
+  }
+ 
+  async function toggleActive(itemId, state) {
+    itemId=itemId.replace('active_','');
+    try {
+      const response = await fetch(`/active/subcategory/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ active: state }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message);
+      } else {
+        console.log('Errore nella richiesta API');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+  initializeSwitches();
+});
 </script>
+
+

@@ -8,7 +8,7 @@
           <i class="mdi mdi-chevron-double-left"></i>
         </a>
       </li>
-      <div class="pagination"></div>
+     
   <% const maxPagesToShow = 4; %> <% if (totalPages <= maxPagesToShow) { %> <%
   for (let page = 1; page <= totalPages; page++) { %>
   <li class="page-item <%= currentPage === page ? 'active' : '' %>">
@@ -45,7 +45,7 @@
       ><%= totalPages %></a
     >
   </li>
-</div>
+
   <% } %> <% } %>
    <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
     <a

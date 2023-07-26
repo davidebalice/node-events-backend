@@ -113,6 +113,22 @@
               </select>
             </div>
           </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Subcategory
+            </label>
+            <div class="col-md-10">
+              <select 
+                class="form-select" 
+                id="subcategorySelect"
+                name="subcategory"
+                style="max-width: 200px"
+              >
+              <option value=""> - Select - </option>
+              </select>
+            </div>
+          </div>
           
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
@@ -180,5 +196,25 @@
 
   typeDateSelect.addEventListener("change", handleTypeDateChange);
   handleTypeDateChange();
+
+  const categorySelect = document.getElementById('categorySelect');
+  const subcategorySelect = document.getElementById('subcategorySelect');
+
+  categorySelect.addEventListener('change', () => {
+    const categoryId = categorySelect.value;
+
+    fetch(`/subcategories/${categoryId}`)
+      .then((response) => response.json())
+      .then((subcategories) => {
+        subcategorySelect.innerHTML = '<option value=""> - Select - </option>';
+        subcategories.forEach((subcategory) => {
+          const option = document.createElement('option');
+          option.value = subcategory._id;
+          option.textContent = subcategory.name;
+          subcategorySelect.appendChild(option);
+        });
+      })
+      .catch((error) => console.error('Errore durante la fetch delle sottocategorie:', error));
+  });
 </script>
 <%- contentFor('FooterJs') %> <%- contentFor('BottomJs') %>

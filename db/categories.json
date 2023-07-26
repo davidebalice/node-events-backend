@@ -1,0 +1,90 @@
+[{
+  "_id": {
+    "$oid": "64bb7b324ce949744db34b3d"
+  },
+  "name": "Demonstrations",
+  "order": 4,
+  "imageCover": "aaaaaaaaaa",
+  "slug": "metal",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1689811200000"
+    }
+  },
+  "description": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>"
+},{
+  "_id": {
+    "$oid": "64bfa37e85896cb9872e8c6f"
+  },
+  "name": "Shows",
+  "description": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1690280825747"
+    }
+  },
+  "active": true,
+  "order": 2,
+  "slug": "ergrgergerg",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64bfe00f2e5cae8de2bb6211"
+  },
+  "name": "Concerts",
+  "description": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1690296318839"
+    }
+  },
+  "active": true,
+  "order": 3,
+  "slug": "dfgdfg",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64bfe0132e5cae8de2bb622e"
+  },
+  "name": "Cinema",
+  "description": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1690296318839"
+    }
+  },
+  "active": true,
+  "order": 5,
+  "slug": "fgdfgdfg",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64bfe01e2e5cae8de2bb6268"
+  },
+  "name": "Theater",
+  "description": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1690296318839"
+    }
+  },
+  "active": true,
+  "order": 6,
+  "slug": "dfgdfgdf",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64bfe0222e5cae8de2bb6285"
+  },
+  "name": "Live music",
+  "description": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1690296318839"
+    }
+  },
+  "active": true,
+  "order": 1,
+  "slug": "fgdfgfdg",
+  "__v": 0
+}]

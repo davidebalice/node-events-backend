@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const sharp = require('sharp');
 const Event = require('../models/eventModel');
 const Category = require('../models/categoryModel');
+const Subcategory = require('../models/subcategoryModel');
 const ApiQuery = require('../utils/apiquery');
 const AppError = require('../utils/error');
 const catchAsync = require('../utils/catchAsync');
@@ -68,8 +69,8 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
     filterData = { name: { $regex: regex } };
   }
   const setLimit = 20;
-  const page = req.query.page * 1 || 1;
   const limit = req.query.limit * 1 || setLimit;
+  const page = req.query.page * 1 || 1;
   const skip = (page - 1) * limit;
   const events = await Event.find(filterData)
     .sort('-createdAt')
@@ -96,6 +97,16 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.addEvent = catchAsync(async (req, res, next) => {
+  const categories = await Category.find({}).sort({ order: 1 });
+  res.locals = { title: 'Add event' };
+  res.render('Events/add', {
+    formData: '',
+    message: '',
+    categories: categories,
+  });
+});
+
 exports.createEvent = catchAsync(async (req, res, next) => {
   try {
     const latitude = 40.414141;
@@ -111,20 +122,19 @@ exports.createEvent = catchAsync(async (req, res, next) => {
     await Event.create(req.body);
     res.redirect('/events?m=1');
   } catch (err) {
-    const categories = await Category.find({});
+    const categories = await Category.find().sort({ order: 1 });
     res.render('Events/add', {
       status: 200,
       title: 'Add event',
       formData: req.body,
       message: err.message,
-      categories: categories,
+      categories,
     });
   }
 });
 
 exports.deleteEvent = catchAsync(async (req, res, next) => {
   const doc = await Event.findByIdAndDelete(req.params.id);
-
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
@@ -135,9 +145,10 @@ exports.getEvent = factory.getOne(Event, { path: 'reviews' });
 
 exports.editEvent = catchAsync(async (req, res, next) => {
   let query = await Event.findById(req.params.id);
-
-  // if (popOptions) query = query.populate(popOptions);
   const doc = await query;
+
+  console.log('doc.category');
+  console.log(doc.category);
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
@@ -154,6 +165,10 @@ exports.editEvent = catchAsync(async (req, res, next) => {
   const monthEnd = String(endDateObj.getMonth() + 1).padStart(2, '0');
   const dayEnd = String(endDateObj.getDate()).padStart(2, '0');
   const formattedEndDate = `${yearEnd}-${monthEnd}-${dayEnd}`;
+  const categories = await Category.find().sort({ order: 1 });
+  const subcategories = await Subcategory.find({ category: doc.category }).sort(
+    { order: 1 }
+  );
 
   let message = '';
   res.render('Events/edit', {
@@ -162,7 +177,9 @@ exports.editEvent = catchAsync(async (req, res, next) => {
     formData: doc,
     formattedStartDate,
     formattedEndDate,
-    message: message,
+    message,
+    categories,
+    subcategories,
   });
 });
 
@@ -209,10 +226,7 @@ exports.updateDateForDemo = catchAsync(async (req, res, next) => {
 
 exports.photoEvent = catchAsync(async (req, res, next) => {
   let query = await Event.findById(req.params.id);
-
-  // if (popOptions) query = query.populate(popOptions);
   const doc = await query;
-
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
@@ -227,11 +241,9 @@ exports.photoEvent = catchAsync(async (req, res, next) => {
 
 exports.updatePhoto = catchAsync(async (req, res, next) => {
   const doc = await Event.findByIdAndUpdate(req.params.id, req.body);
-
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
-
   res.redirect('/event/photo/' + doc._id);
 });
 
