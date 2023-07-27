@@ -59,4 +59,13 @@ router
     categoryController.moveCategory
   );
 
+router
+  .route('/active/category/:id')
+  .post(
+    demoMode,
+    authController.protect,
+    authController.restrictTo('admin'),
+    categoryController.activeCategory
+  );
+
 module.exports = router;

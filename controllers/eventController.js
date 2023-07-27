@@ -68,7 +68,7 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
     const regex = new RegExp(req.query.key, 'i');
     filterData = { name: { $regex: regex } };
   }
-  const setLimit = 20;
+  const setLimit = 12;
   const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
   const skip = (page - 1) * limit;
@@ -330,4 +330,15 @@ exports.updateLocation = catchAsync(async (req, res, next) => {
   }
 
   res.redirect('/event/location/' + req.params.id);
+});
+
+
+exports.activeEvent = catchAsync(async (req, res, next) => {
+  const doc = await Event.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
 });

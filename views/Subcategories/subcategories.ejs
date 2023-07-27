@@ -84,19 +84,10 @@
           <table class="table align-middle table-nowrap table-check">
             <thead class="table-light">
               <tr>
-                <th style="width: 20px" class="align-middle">
-                  <div class="form-check font-size-16">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="checkAll"
-                    />
-                    <label class="form-check-label" for="checkAll"></label>
-                  </div>
-                </th>
+                <th class="align-middle" style="width: 5%">Publish</th>
                 <th class="align-middle" style="width: 30%">Subcategory</th>
                 <th class="align-middle" style="width: 30%">Category</th>
-                <th class="align-middle">Action</th>
+                <th class="align-middle" style="width: 30%">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -105,18 +96,11 @@
               <tr>
                 <td>
                   <div class="form-check form-switch">
-                    <input class="form-check-input activeSwtich" type="checkbox" role="switch" data-item-id="active_<%= subcategory._id %>" id="active_<%= subcategory._id %>">
-                  </div>
-                  <div class="form-check font-size-16">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="orderidcheck01"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="orderidcheck01"
-                    ></label>
+                    <input class="form-check-input activeSwtich" type="checkbox" role="switch" data-item-id="active_<%= subcategory._id %>" 
+                    <% if (subcategory.active) { %>
+                      checked
+                    <% } %>
+                    id="active_<%= subcategory._id %>">
                   </div>
                 </td>
 
@@ -226,7 +210,7 @@
           </table>
         </div>
         <%- include('./../Partials/Pagination', { totalPages, currentPage,
-        limit, page }) %>
+        limit, page, pageName:'subcategories'  }) %>
       </div>
     </div>
   </div>
@@ -263,10 +247,6 @@
     });
   });
 
-  function changePage(page, limit) {
-    window.location.href = `/categories?page=${page}&limit=${limit}`;
-  }
-
   async function moveSubcategory(subcategoryId, direction) {
     try {
       const response = await fetch(`/move/subcategory`, {
@@ -285,51 +265,13 @@
         window.location.href = '/subcategories';
       }
     } catch (error) {
-      console.error('Errore durante la richiesta HTTP:', error);
+      console.error('Error http:', error);
     }
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-  function initializeSwitches() {
-    const switches = document.querySelectorAll('[id^="active_"]');
-
-    switches.forEach(switchItem => {
-      const itemId = switchItem.dataset.itemId;
-      //const isActive = JSON.parse(switchItem.dataset.active);
-
-
-      switchItem.addEventListener('change', function(event) {
-        const state = event.target.checked;
-        toggleActive(itemId, state);
-      });
-    });
-  }
- 
-  async function toggleActive(itemId, state) {
-    itemId=itemId.replace('active_','');
-    try {
-      const response = await fetch(`/active/subcategory/${itemId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ active: state }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message);
-      } else {
-        console.log('Errore nella richiesta API');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  
-
-  initializeSwitches();
-});
+    initializeSwitches('subcategory');
+  });
 </script>
 
 

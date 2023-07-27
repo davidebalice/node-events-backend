@@ -213,3 +213,13 @@ exports.moveCategory = catchAsync(async (req, res, next) => {
     res.status(500).json({ message: 'error' });
   }
 });
+
+exports.activeCategory = catchAsync(async (req, res, next) => {
+  const doc = await Category.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+});

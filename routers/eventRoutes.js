@@ -90,4 +90,13 @@ router
     eventController.updateLocation
   );
 
+  router
+  .route('/active/event/:id')
+  .post(
+    demoMode,
+    authController.protect,
+    authController.restrictTo('admin'),
+    eventController.activeEvent
+  );
+
 module.exports = router;

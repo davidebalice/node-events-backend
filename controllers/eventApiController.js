@@ -16,7 +16,8 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
     filterData = { name: { $regex: regex } };
   }
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 10;
+  const setLimit = 1;
+  const limit = req.query.limit * 1 || setLimit;
   const skip = (page - 1) * limit;
   const events = await Event.find(filterData)
     .sort('-createdAt')

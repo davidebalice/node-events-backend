@@ -22,7 +22,6 @@ const subcategorySchema = new mongoose.Schema(
     active: {
       type: Boolean,
       default: true,
-      select: false,
     },
     order: { type: Number, required: true, default: 1 },
   },

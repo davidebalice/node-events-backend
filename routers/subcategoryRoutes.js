@@ -51,4 +51,13 @@ router
     subcategoryController.moveSubcategory
   );
 
+router
+  .route('/active/subcategory/:id')
+  .post(
+    demoMode,
+    authController.protect,
+    authController.restrictTo('admin'),
+    subcategoryController.activeSubcategory
+  );
+
 module.exports = router;

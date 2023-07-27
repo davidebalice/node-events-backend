@@ -73,16 +73,7 @@
           <table class="table align-middle table-nowrap table-check">
             <thead class="table-light">
               <tr>
-                <th style="width: 20px" class="align-middle">
-                  <div class="form-check font-size-16">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="checkAll"
-                    />
-                    <label class="form-check-label" for="checkAll"></label>
-                  </div>
-                </th>
+                <th class="align-middle" style="width: 5%">Publish</th>
                 <th class="align-middle" style="width: 7%">Image</th>
                 <th class="align-middle" style="width: 15%">Event name</th>
                 <th class="align-middle" style="width: 10%">Price</th>
@@ -93,42 +84,45 @@
             </thead>
             <tbody>
               <%- contentFor('body') %> <% if (events.length > 0) { %> <%
-              events.forEach(function(events) { %>
+              events.forEach(function(event) { %>
               <tr>
                 <td>
-                  <div class="form-check font-size-16">
+                  <div class="form-check form-switch">
                     <input
-                      class="form-check-input"
+                      class="form-check-input activeSwtich"
                       type="checkbox"
-                      id="orderidcheck01"
+                      role="switch"
+                      data-item-id="active_<%= event._id %>"
+                      <%
+                      if
+                      (event.active)
+                      {
+                      %
                     />
-                    <label
-                      class="form-check-label"
-                      for="orderidcheck01"
-                    ></label>
+                    checked <% } %> id="active_<%= event._id %>" />
                   </div>
                 </td>
                 <td>
                   <a
-                    href="/event/photo/<%= events._id %>"
+                    href="/event/photo/<%= event._id %>"
                     data-toggle="tooltip"
                     data-placement="top"
                     title="Photo"
                   >
                     <img
-                      src="<%= process.env.NODE_URL %>/img/events/<%= events.imageCover %>"
+                      src="<%= process.env.NODE_URL %>/img/events/<%= event.imageCover %>"
                       style="width: 120px; height: auto"
                       onerror="this.onerror=null;this.src='/placeholder.jpg';"
                   /></a>
                 </td>
-                <td><b><%= events.name %></b></td>
+                <td><b><%= event.name %></b></td>
                 <td>fgdggdfgdfg</td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-primary btn-sm btn-rounded"
                   >
-                    <%= events.difficulty %>
+                    <%= event.difficulty %>
                   </button>
                 </td>
                 <td>
@@ -141,7 +135,7 @@
                     <ul class="list-inline mb-0">
                       <li class="list-inline-item">
                         <a
-                          href="/event/<%= events._id %>"
+                          href="/event/<%= event._id %>"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -152,7 +146,7 @@
 
                       <li class="list-inline-item">
                         <a
-                          href="/event/photo/<%= events._id %>"
+                          href="/event/photo/<%= event._id %>"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -163,7 +157,7 @@
 
                       <li class="list-inline-item">
                         <a
-                          href="/event/location/<%= events._id %>"
+                          href="/event/location/<%= event._id %>"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -174,13 +168,13 @@
 
                       <li class="list-inline-item">
                         <form
-                          id="deleteForm<%= events._id %>"
+                          id="deleteForm<%= event._id %>"
                           method="post"
-                          action="/event/delete/<%= events._id %>"
+                          action="/event/delete/<%= event._id %>"
                         >
                           <a
-                            href="javascript:deleteEvent('<%= events._id %>')"
-                            id="deleteLink<%= events._id %>"
+                            href="javascript:deleteEvent('<%= event._id %>')"
+                            id="deleteLink<%= event._id %>"
                             data-toggle="tooltip"
                             data-placement="top"
                             title="Delete"
@@ -205,7 +199,7 @@
           </table>
         </div>
         <%- include('./../Partials/Pagination', { totalPages, currentPage,
-        limit, page }) %>
+        limit, page, pageName:'events' }) %>
       </div>
     </div>
   </div>
@@ -214,10 +208,6 @@
 <%- contentFor('FooterJs') %> <%- contentFor('BottomJs') %>
 
 <script>
-  function changePage(page, limit) {
-    window.location.href = `/events?page=${page}&limit=${limit}`;
-  }
-
   document.addEventListener('load', function () {
     $(function () {
       $('[data-toggle="tooltip"]').tooltip();
@@ -245,4 +235,6 @@
         .catch((error) => console.error(error));
     });
   });
+
+  initializeSwitches('event');
 </script>

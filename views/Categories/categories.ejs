@@ -73,19 +73,10 @@
           <table class="table align-middle table-nowrap table-check">
             <thead class="table-light">
               <tr>
-                <th style="width: 20px" class="align-middle">
-                  <div class="form-check font-size-16">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="checkAll"
-                    />
-                    <label class="form-check-label" for="checkAll"></label>
-                  </div>
-                </th>
+                <th class="align-middle" style="width: 5%">Publish</th>
                 <th class="align-middle" style="width: 10%">Image</th>
-                <th class="align-middle" style="width: 60%">Category</th>
-                <th class="align-middle">Action</th>
+                <th class="align-middle" style="width: 50%">Category</th>
+                <th class="align-middle" style="width: 30%">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -93,16 +84,17 @@
               categories.forEach(function(category) { %>
               <tr>
                 <td>
-                  <div class="form-check font-size-16">
+                  <div class="form-check form-switch">
                     <input
-                      class="form-check-input"
+                      class="form-check-input activeSwtich"
                       type="checkbox"
-                      id="orderidcheck01"
+                      role="switch"
+                      data-item-id="active_<%= category._id %>"
+                      <% if (category.active) { %>
+                        checked
+                      <% } %>
+                      id="active_<%= category._id %>"
                     />
-                    <label
-                      class="form-check-label"
-                      for="orderidcheck01"
-                    ></label>
                   </div>
                 </td>
                 <td>
@@ -119,9 +111,7 @@
                   /></a>
                 </td>
                 <td><b><%= category.name %></b></td>
-               
-              
-               
+
                 <td>
                   <div class="d-flex gap-1">
                     <ul class="list-inline mb-0">
@@ -236,7 +226,7 @@
           </table>
         </div>
         <%- include('./../Partials/Pagination', { totalPages, currentPage,
-        limit, page }) %>
+        limit, page, pageName:'categories' }) %>
       </div>
     </div>
   </div>
@@ -273,10 +263,6 @@
     });
   });
 
-  function changePage(page, limit) {
-    window.location.href = `/categories?page=${page}&limit=${limit}`;
-  }
-
   async function moveCategory(categoryId, direction) {
     try {
       const response = await fetch(`/move/category`, {
@@ -298,4 +284,7 @@
       console.error('Errore durante la richiesta HTTP:', error);
     }
   }
+
+  initializeSwitches('category');
+
 </script>

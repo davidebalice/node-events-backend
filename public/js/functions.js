@@ -38,3 +38,41 @@ const removeMessage = (classeDiv, delay) => {
 };
 
 removeMessage('errors', 5000);
+
+function initializeSwitches(model) {
+  const switches = document.querySelectorAll('[id^="active_"]');
+  switches.forEach((switchItem) => {
+    const itemId = switchItem.dataset.itemId;
+    switchItem.addEventListener('change', function (event) {
+      const state = event.target.checked;
+      toggleActive(itemId, state, model);
+    });
+  });
+}
+
+async function toggleActive(itemId, state, model) {
+  itemId = itemId.replace('active_', '');
+  try {
+    const response = await fetch(`/active/${model}/${itemId}`, {
+      method: 'POST',
+      mode: 'same-origin',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ active: state }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log('success');
+    } else {
+      console.log('Error request');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function changePage(page, limit, pageName) {
+  window.location.href = `/${pageName}?page=${page}&limit=${limit}`;
+}

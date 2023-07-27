@@ -51,9 +51,9 @@ exports.getAllSubcategories = catchAsync(async (req, res, next) => {
   //?viewType=json
   const viewType = req.query.viewType;
   if (viewType === 'json') {
-    console.log(subcategories);
     res.json(subcategories);
   } else {
+    console.log(subcategories);
     res.render('Subcategories/subcategories', {
       title: 'Subcategories',
       subcategories,
@@ -191,5 +191,15 @@ exports.moveSubcategory = catchAsync(async (req, res, next) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'error' });
+  }
+});
+
+exports.activeSubcategory = catchAsync(async (req, res, next) => {
+  const doc = await Subcategory.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
   }
 });

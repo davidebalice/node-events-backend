@@ -5913,3 +5913,20 @@ body[data-layout-mode='dark'] .gallery-box .box-content {
 .bold {
   font-weight: bold !important;
 }
+.form-check-input.activeSwtich {
+  width: 44px;
+  height: 22px;
+  position: relative;
+  border-radius: 15px;
+  background-color: #a1a1a1;
+}
+.form-check-input.activeSwtich:checked {
+  background-color: #08b110;
+}
+.form-check-input.activeSwtich[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  cursor: pointer;
+}

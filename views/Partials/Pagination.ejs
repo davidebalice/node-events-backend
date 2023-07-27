@@ -2,7 +2,7 @@
     <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
         <a
           class="page-link"
-          <% if (currentPage !== 1) { %> onclick="changePage(1, '<%= limit %>')" <% } %>
+          <% if (currentPage !== 1) { %> onclick="changePage(1, '<%= limit %>', '<%= pageName %>')" <% } %>
           aria-label="First"
         >
           <i class="mdi mdi-chevron-double-left"></i>
@@ -12,7 +12,7 @@
   <% const maxPagesToShow = 4; %> <% if (totalPages <= maxPagesToShow) { %> <%
   for (let page = 1; page <= totalPages; page++) { %>
   <li class="page-item <%= currentPage === page ? 'active' : '' %>">
-    <a class="page-link" onclick="changePage('<%= page %>','<%= limit %>')"
+    <a class="page-link" onclick="changePage('<%= page %>','<%= limit %>', '<%= pageName %>')"
       ><%= page %></a
     >
   </li>
@@ -20,7 +20,7 @@
   Math.floor(maxPagesToShow / 2), 1); %> <% const endPage = Math.min(startPage +
   maxPagesToShow - 1, totalPages); %> <% if (startPage > 1) { %>
   <li class="page-item">
-    <a class="page-link" onclick="changePage('1','<%= limit %>')">1</a>
+    <a class="page-link" onclick="changePage('1','<%= limit %>', '<%= pageName %>')">1</a>
   </li>
   <% if (startPage > 2) { %>
   <li class="page-item disabled">
@@ -28,7 +28,7 @@
   </li>
   <% } %> <% } %> <% for (let page = startPage; page <= endPage; page++) { %>
   <li class="page-item <%= currentPage === page ? 'active' : '' %>">
-    <a class="page-link" onclick="changePage('<%= page %>','<%= limit %>')"
+    <a class="page-link" onclick="changePage('<%= page %>','<%= limit %>', '<%= pageName %>')"
       ><%= page %></a
     >
   </li>
@@ -41,7 +41,7 @@
   <li class="page-item">
     <a
       class="page-link"
-      onclick="changePage('<%= totalPages %>','<%= limit %>')"
+      onclick="changePage('<%= totalPages %>','<%= limit %>', '<%= pageName %>')"
       ><%= totalPages %></a
     >
   </li>
@@ -50,7 +50,7 @@
    <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
     <a
       class="page-link"
-      <% if (currentPage !== totalPages) { %> onclick="changePage('<%= totalPages %>', '<%= limit %>')" <% } %>
+      <% if (currentPage !== totalPages) { %> onclick="changePage('<%= totalPages %>', '<%= limit %>', '<%= pageName %>')" <% } %>
       aria-label="Last"
     >
       <i class="mdi mdi-chevron-double-right"></i>
