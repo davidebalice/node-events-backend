@@ -85,16 +85,10 @@
               <tr>
                 <td>
                   <div class="form-check form-switch">
-                    <input
-                      class="form-check-input activeSwtich"
-                      type="checkbox"
-                      role="switch"
-                      data-item-id="active_<%= category._id %>"
-                      <% if (category.active) { %>
-                        checked
-                      <% } %>
-                      id="active_<%= category._id %>"
-                    />
+                    <input class="form-check-input activeSwtich" type="checkbox"
+                    role="switch" data-item-id="active_<%= category._id %>"
+                    //prettier-ignore <% if (category.active) { %>checked<% } %>
+                    id="active_<%= category._id %>" />
                   </div>
                 </td>
                 <td>
@@ -286,5 +280,4 @@
   }
 
   initializeSwitches('category');
-
 </script>

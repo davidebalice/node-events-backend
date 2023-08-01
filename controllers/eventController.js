@@ -72,12 +72,16 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
   const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
   const skip = (page - 1) * limit;
-  const events = await Event.find(filterData)
-    .sort('-createdAt')
-    .skip(skip)
-    .limit(limit);
+  const events = await Event.find(filterData).sort('-createdAt').skip(skip).limit(limit);
   const count = await Event.countDocuments();
   const totalPages = Math.ceil(count / limit);
+
+  const formattedEvents = events.map((event) => ({
+    ...event._doc,
+    formattedStart: format(new Date(event.startDate), 'dd/MM/yyyy'),
+    formattedEnd: format(new Date(event.endDate), 'dd/MM/yyyy'),
+  }));
+
   let message = '';
   if (req.query.m) {
     if (req.query.m === '1') {
@@ -88,7 +92,7 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
   }
   res.render('Events/events', {
     title: 'Events',
-    events,
+    events: formattedEvents,
     currentPage: page,
     page,
     limit,
@@ -166,9 +170,7 @@ exports.editEvent = catchAsync(async (req, res, next) => {
   const dayEnd = String(endDateObj.getDate()).padStart(2, '0');
   const formattedEndDate = `${yearEnd}-${monthEnd}-${dayEnd}`;
   const categories = await Category.find().sort({ order: 1 });
-  const subcategories = await Subcategory.find({ category: doc.category }).sort(
-    { order: 1 }
-  );
+  const subcategories = await Subcategory.find({ category: doc.category }).sort({ order: 1 });
 
   let message = '';
   res.render('Events/edit', {
@@ -248,10 +250,7 @@ exports.updatePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.updateGallery = catchAsync(async (req, res, next) => {
-  const doc = await Event.updateOne(
-    { _id: req.params.id },
-    { $push: { images: { $each: req.body.images } } }
-  );
+  const doc = await Event.updateOne({ _id: req.params.id }, { $push: { images: { $each: req.body.images } } });
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
@@ -272,10 +271,7 @@ exports.deleteGallery = catchAsync(async (req, res, next) => {
     query.images.splice(index, 1);
   }
 
-  const doc = await Event.updateOne(
-    { _id: req.body.id },
-    { $set: { images: query.images } }
-  );
+  const doc = await Event.updateOne({ _id: req.body.id }, { $set: { images: query.images } });
 
   let pathFile = path.join(__dirname, '/public/img/events', image);
   pathFile = pathFile.replace('controllers', '');
@@ -309,8 +305,16 @@ exports.locationEvent = catchAsync(async (req, res, next) => {
 exports.updateLocation = catchAsync(async (req, res, next) => {
   const coordinates = req.body.coordinates.split(',');
 
-  const longitude = coordinates[0];
-  const latitude = coordinates[1];
+  let longitude = coordinates[0];
+  let latitude = coordinates[1];
+  console.log(longitude);
+  console.log(latitude);
+  if ((longitude===null)||(longitude==="")||(longitude===NaN)||(longitude===undefined)) {
+    longitude = 0;
+  }
+  if ((latitude===null)||(latitude==="")||(latitude===NaN)||(latitude===undefined)) {
+    latitude = 0;
+  }
 
   const location = {
     type: 'Point',
@@ -320,10 +324,7 @@ exports.updateLocation = catchAsync(async (req, res, next) => {
 
   req.body.location = location;
 
-  const doc = await Event.updateOne(
-    { _id: req.params.id },
-    { $set: { location: req.body.location } }
-  );
+  const doc = await Event.updateOne({ _id: req.params.id }, { $set: { location: req.body.location } });
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
@@ -331,7 +332,6 @@ exports.updateLocation = catchAsync(async (req, res, next) => {
 
   res.redirect('/event/location/' + req.params.id);
 });
-
 
 exports.activeEvent = catchAsync(async (req, res, next) => {
   const doc = await Event.findByIdAndUpdate(req.params.id, req.body, {

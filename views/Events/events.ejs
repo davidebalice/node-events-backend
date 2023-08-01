@@ -1,10 +1,7 @@
 <%- contentFor('HeaderCss') %> <%- contentFor('breadcrumb') %>
-
 <div class="row">
   <div class="col-12">
-    <div
-      class="page-title-box d-flex align-items-center justify-content-between"
-    >
+    <div class="page-title-box d-flex align-items-center justify-content-between">
       <h4 class="mb-0">Events</h4>
 
       <div class="page-title-right">
@@ -33,10 +30,7 @@
           <div class="col-sm-8">
             <div class="text-sm-start">
               <a href="/add/event">
-                <button
-                  type="button"
-                  class="btn btn-success waves-effect waves-light mb-2 me-2"
-                >
+                <button type="button" class="btn btn-success waves-effect waves-light mb-2 me-2">
                   <i class="mdi mdi-plus me-1"></i> New event
                 </button>
               </a>
@@ -45,11 +39,7 @@
           <div class="col-sm-4">
             <div class="search-box me-2 mb-2 d-inline-block">
               <div class="position-relative">
-                <form
-                  method="get"
-                  action="/events"
-                  class="row flex-row flex-nowrap"
-                >
+                <form method="get" action="/events" class="row flex-row flex-nowrap">
                   <input
                     type="text"
                     class="form-control col-8 inputSearch"
@@ -76,39 +66,23 @@
                 <th class="align-middle" style="width: 5%">Publish</th>
                 <th class="align-middle" style="width: 7%">Image</th>
                 <th class="align-middle" style="width: 15%">Event name</th>
-                <th class="align-middle" style="width: 10%">Price</th>
-                <th class="align-middle" style="width: 10%">Difficulty</th>
+                <th class="align-middle" style="width: 15%">Date</th>
                 <th class="align-middle" style="width: 30%">Location</th>
                 <th class="align-middle">Action</th>
               </tr>
             </thead>
             <tbody>
-              <%- contentFor('body') %> <% if (events.length > 0) { %> <%
-              events.forEach(function(event) { %>
+              <%- contentFor('body') %> <% if (events.length > 0) { %> <% events.forEach(function(event) { %>
               <tr>
                 <td>
                   <div class="form-check form-switch">
-                    <input
-                      class="form-check-input activeSwtich"
-                      type="checkbox"
-                      role="switch"
-                      data-item-id="active_<%= event._id %>"
-                      <%
-                      if
-                      (event.active)
-                      {
-                      %
-                    />
-                    checked <% } %> id="active_<%= event._id %>" />
+                    <input class="form-check-input activeSwtich" type="checkbox" role="switch" data-item-id="active_<%=
+                    event._id %>" // prettier-ignore <% if (event.active) { %>checked<% } %> id="active_<%= event._id
+                    %>" />
                   </div>
                 </td>
                 <td>
-                  <a
-                    href="/event/photo/<%= event._id %>"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Photo"
-                  >
+                  <a href="/event/photo/<%= event._id %>" data-toggle="tooltip" data-placement="top" title="Photo">
                     <img
                       src="<%= process.env.NODE_URL %>/img/events/<%= event.imageCover %>"
                       style="width: 120px; height: auto"
@@ -116,20 +90,11 @@
                   /></a>
                 </td>
                 <td><b><%= event.name %></b></td>
-                <td>fgdggdfgdfg</td>
                 <td>
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-sm btn-rounded"
-                  >
-                    <%= event.difficulty %>
-                  </button>
+                  <% if(event.typeDate === 'single'){ %> <%= event.formattedStart %> <% } else {%> <%=
+                  event.formattedStart %> - <%= event.formattedEnd %> <%}%>
                 </td>
-                <td>
-                  <ul>
-                    rewweree
-                  </ul>
-                </td>
+                <td><%= event.location.description %></td>
                 <td>
                   <div class="d-flex gap-1">
                     <ul class="list-inline mb-0">
@@ -161,17 +126,13 @@
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
-                          title="Locations"
+                          title="Location"
                           ><i class="mdi mdi-map-marker font-size-22 green"></i
                         ></a>
                       </li>
 
                       <li class="list-inline-item">
-                        <form
-                          id="deleteForm<%= event._id %>"
-                          method="post"
-                          action="/event/delete/<%= event._id %>"
-                        >
+                        <form id="deleteForm<%= event._id %>" method="post" action="/event/delete/<%= event._id %>">
                           <a
                             href="javascript:deleteEvent('<%= event._id %>')"
                             id="deleteLink<%= event._id %>"
@@ -198,8 +159,7 @@
             </tbody>
           </table>
         </div>
-        <%- include('./../Partials/Pagination', { totalPages, currentPage,
-        limit, page, pageName:'events' }) %>
+        <%- include('./../Partials/Pagination', { totalPages, currentPage, limit, page, pageName:'events' }) %>
       </div>
     </div>
   </div>

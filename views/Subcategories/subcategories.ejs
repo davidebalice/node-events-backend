@@ -97,9 +97,8 @@
                 <td>
                   <div class="form-check form-switch">
                     <input class="form-check-input activeSwtich" type="checkbox" role="switch" data-item-id="active_<%= subcategory._id %>" 
-                    <% if (subcategory.active) { %>
-                      checked
-                    <% } %>
+                    //prettier-ignore
+                    <% if (subcategory.active) { %>checked<% } %>
                     id="active_<%= subcategory._id %>">
                   </div>
                 </td>
