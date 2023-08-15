@@ -2,11 +2,22 @@ const { promisify } = require('util');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
-const ApiQuery = require('../utils/apiquery');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/error');
-const Email = require('../utils/email');
+const ApiQuery = require('../middlewares/apiquery');
+const catchAsync = require('../middlewares/catchAsync');
+const AppError = require('../middlewares/error');
+const Email = require('../middlewares/email');
 const User = require('../models/userModel');
+
+const DEMO_MODE = process.env.DEMO_MODE === true;
+
+function redirectToLogin(req, res, error = null, message = null) {
+  res.render('Auth/auth-login', {
+    title: 'Login',
+    DEMO_MODE: process.env.DEMO_MODE,
+    message: message || req.flash('message'),
+    error: error || req.flash('error'),
+  });
+}
 
 const signToken = (id) =>
   jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -17,9 +28,7 @@ const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
 
   const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
+    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
@@ -28,17 +37,9 @@ const createSendToken = (user, statusCode, req, res) => {
 
   user.password = undefined;
   req.flash('success', 'Login successfully');
+  req.session.user = user;
+  res.locals.currentUser = user;
   res.redirect('/');
-
-  /*
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: {
-      user,
-    },
-  });
-*/
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
@@ -56,27 +57,24 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-
+  console.log(email);
   if (!email || !password) {
-    //return next(new AppError('Please insert email and password', 400));
     req.flash('error', 'Please insert email and password');
-    res.redirect('/login');
+    return redirectToLogin(req, res);
   }
 
   const user = await User.findOne({ email: email }).select('+password');
 
   if (!user) {
-    //return next(new AppError('Incorrect email or password', 401));
     req.flash('error', 'Incorrect email or password');
-    res.redirect('/login');
+    return redirectToLogin(req, res);
   }
 
   const correct = await user.correctPassword(password, user.password);
 
   if (!correct) {
-    //return next(new AppError('Incorrect email or password', 401));
     req.flash('error', 'Incorrect email or password');
-    res.redirect('/login');
+    return redirectToLogin(req, res);
   }
 
   createSendToken(user, 200, req, res);
@@ -87,21 +85,13 @@ exports.logout = catchAsync(async (req, res, next) => {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   });
-  /*
-  res.status(200).json({
-    status: 'success',
-  });
-  */
   req.flash('error', 'Logout successfully');
   res.redirect('/login');
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
   } else {
     if (req.cookies.jwt) {
@@ -109,15 +99,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     }
   }
 
-  //console.log(token);
-
   if (!token || token === undefined) {
-    res.locals = { title: 'Login' };
-    res.render('Auth/auth-login', {
-      message: req.flash('message'),
-      error: req.flash('error'),
-    });
+    return redirectToLogin(req, res);
   }
+
   try {
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
@@ -135,17 +120,14 @@ exports.protect = catchAsync(async (req, res, next) => {
     next();
   } catch (err) {
     console.error(err);
-    return res.redirect('/login');
+    return redirectToLogin(req, res);
   }
 });
 
 exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     try {
-      const decoded = await promisify(jwt.verify)(
-        req.cookies.jwt,
-        process.env.JWT_SECRET
-      );
+      const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
 
       const currentUser = await User.findById(decoded.id);
       if (!currentUser) {
@@ -169,9 +151,7 @@ exports.restrictTo =
   (...roles) =>
   (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError('You do not have permission to perform this action', 403)
-      );
+      return next(new AppError('You do not have permission to perform this action', 403));
     }
     next();
   };
@@ -186,9 +166,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/users/resetPassword/${resetToken}`;
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
     res.status(200).json({
       status: 'success',
@@ -199,17 +177,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     user.passwordResetExpires = undefined;
     console.log(err);
     await user.save({ validateBeforeSave: false });
-    return next(
-      new AppError('There was an error sending email. Try later', 500)
-    );
+    return next(new AppError('There was an error sending email. Try later', 500));
   }
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-  const hashedToken = crypto
-    .createHash('sha256')
-    .update(req.params.token)
-    .digest('hex');
+  const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,

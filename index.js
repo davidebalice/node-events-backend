@@ -5,6 +5,7 @@ const path = require('path');
 const http = require('http').Server(app);
 const validator = require('express-validator');
 const cookieParser = require('cookie-parser');
+const currentUser = require('./middlewares/currentUser');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE;
@@ -67,9 +68,7 @@ app.use(
     },
   })
 );
-app.use(
-  session({ resave: false, saveUninitialized: true, secret: 'nodedemo' })
-);
+app.use(session({ resave: false, saveUninitialized: true, secret: 'nodedemo' }));
 
 app.use(flash());
 app.use(
@@ -79,7 +78,7 @@ app.use(
     textsVarName: 'translation',
   })
 );
-
+app.use(currentUser);
 const authRouter = require('./routers/authRoutes');
 app.use('/', authRouter);
 

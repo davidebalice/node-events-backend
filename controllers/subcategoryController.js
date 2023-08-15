@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const sharp = require('sharp');
 const Subcategory = require('../models/subcategoryModel');
 const Category = require('../models/categoryModel');
-const ApiQuery = require('../utils/apiquery');
-const AppError = require('../utils/error');
-const catchAsync = require('../utils/catchAsync');
+const ApiQuery = require('../middlewares/apiquery');
+const AppError = require('../middlewares/error');
+const catchAsync = require('../middlewares/catchAsync');
 const factory = require('./handlerFactory');
 const { ObjectId } = require('mongodb');
 

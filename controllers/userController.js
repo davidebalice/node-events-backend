@@ -1,8 +1,10 @@
 const User = require('../models/userModel');
-const catchAsync = require('../utils/catchAsync');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const catchAsync = require('../middlewares/catchAsync');
 const mongoose = require('mongoose');
 const factory = require('./handlerFactory');
-const AppError = require('../utils/error');
+const AppError = require('../middlewares/error');
 const multer = require('multer');
 const sharp = require('sharp');
 const multerStorage = multer.memoryStorage();
@@ -47,41 +49,6 @@ exports.getMe = (req, res, next) => {
   next();
 };
 
-exports.updateMe = catchAsync(async (req, res, next) => {
-  if (req.body.password || req.body.passwordConfirm) {
-    return next(
-      new AppError(
-        'This route is not for password updates. Please use /updateMyPassword.',
-        400
-      )
-    );
-  }
-
-  const filteredBody = filterObj(req.body, 'surname', 'name', 'email');
-  if (req.file) filteredBody.photo = req.file.filename;
-
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
-    new: true,
-    runValidators: true,
-  });
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      user: updatedUser,
-    },
-  });
-});
-
-exports.deleteMe = catchAsync(async (req, res, next) => {
-  await User.findByIdAndUpdate(req.user.id, { active: false });
-
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
-});
-
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   let filterData = {};
   if (req.query.key) {
@@ -91,10 +58,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   const page = req.query.page * 1 || 1;
   const limit = req.query.limit * 1 || 10;
   const skip = (page - 1) * limit;
-  const users = await User.find(filterData)
-    .sort('-createdAt')
-    .skip(skip)
-    .limit(limit);
+  const users = await User.find(filterData).sort('-createdAt').skip(skip).limit(limit);
   const count = await User.countDocuments();
   const totalPages = Math.ceil(count / limit);
   let message = '';
@@ -196,12 +160,15 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   res.redirect('/users?m=2');
 });
 
+//$2a$12$YaT9qvMZR3HfeqEz5OfSGOQGKrKG/dTH2DDBSI0FfMErkjfZdyUfC
+
 exports.editPassword = catchAsync(async (req, res, next) => {
-  let query = await User.findById(req.params.id);
+  let query = await User.findById(req.params.id).select('+password');
   const doc = await query;
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+
   res.render('Users/password', {
     status: 200,
     title: 'Edit password',
@@ -212,14 +179,33 @@ exports.editPassword = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   try {
-    const doc = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const { password, passwordConfirm } = req.body;
+
+    if (password !== passwordConfirm) {
+      return res.render('Users/password', {
+        status: 400,
+        title: 'Update password',
+        formData: null,
+        message: 'Password not match',
+      });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(password, 12);
+
+    const doc = await User.findByIdAndUpdate(
+      req.params.id,
+      { password: hashedNewPassword },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
     if (!doc) {
       return next(new AppError('No document found with that ID', 404));
     }
-    const message = 'password updated';
+
+    const message = 'Password updated';
     res.render('Users/password', {
       status: 200,
       title: 'Update password',
@@ -227,15 +213,12 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
       message: message,
     });
   } catch (err) {
-    const doc = await User.findById(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const doc = await User.findById(req.params.id, req.body);
     if (!doc) {
-      // return next(new AppError('No document found with that ID', 404));
+      return next(new AppError('No document found with that ID', 404));
     }
     res.render('Users/password', {
-      status: 200,
+      status: 500,
       title: 'Update password',
       formData: doc,
       message: err.message,
@@ -258,4 +241,114 @@ exports.photoUser = catchAsync(async (req, res, next) => {
     formData: doc,
     message: message,
   });
+});
+
+exports.profile = catchAsync(async (req, res, next) => {
+  const user = req.user;
+
+  res.render('Users/profile', {
+    title: 'Profile',
+    formData: user,
+    DEMO_MODE: process.env.DEMO_MODE,
+    message: req.flash('message'),
+    error: req.flash('error'),
+  });
+});
+
+exports.updateMe = catchAsync(async (req, res, next) => {
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(new AppError('This route is not for password updates. Please use /updateMyPassword.', 400));
+  }
+
+  const filteredBody = filterObj(req.body, 'surname', 'name', 'email');
+  if (req.file) filteredBody.photo = req.file.filename;
+
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+    new: true,
+    runValidators: true,
+  });
+
+  req.flash('message', 'Profile updated successfully');
+  req.flash('error', 'Error during update');
+
+  res.render('Users/profile', {
+    title: 'Profile',
+    formData: updatedUser,
+    DEMO_MODE: process.env.DEMO_MODE,
+    message: req.flash('message'),
+    error: req.flash('error'),
+  });
+});
+
+exports.passwordMe = catchAsync(async (req, res, next) => {
+  const user = req.user;
+
+  res.render('Users/passwordMe', {
+    title: 'Change password',
+    formData: user,
+    DEMO_MODE: process.env.DEMO_MODE,
+    message: req.flash('message'),
+    error: req.flash('error'),
+  });
+});
+
+exports.updatePasswordMe = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id).select('+password');
+  try {
+    const { password, passwordConfirm, oldPassword } = req.body;
+
+    if (password !== passwordConfirm) {
+      return res.render('Users/passwordMe', {
+        status: 400,
+        title: 'Update password',
+        formData: user,
+        message: 'Password not match',
+      });
+    }
+
+    const isOldPasswordCorrect = await user.correctPassword(oldPassword, user.password);
+
+    if (!isOldPasswordCorrect) {
+      return res.render('Users/passwordMe', {
+        status: 400,
+        title: 'Update password',
+        formData: user,
+        message: 'Old password is incorrect',
+      });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(password, 12);
+
+    const doc = await User.findByIdAndUpdate(
+      user._id,
+      { password: hashedNewPassword },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!doc) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+
+    const message = 'Password updated';
+    res.render('Users/passwordMe', {
+      status: 200,
+      title: 'Update password',
+      formData: doc,
+      message: message,
+    });
+  } catch (err) {
+    const doc = await User.findById(user._id, req.body);
+    if (!doc) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+    res.render('Users/passwordMe', {
+      status: 500,
+      title: 'Update password',
+      formData: user,
+      message: err.message,
+    });
+  }
 });

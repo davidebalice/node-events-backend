@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const subcategoryController = require('../controllers/subcategoryController');
 const authController = require('../controllers/authController');
-const demoMode = require('../utils/demo_mode');
+const demoMode = require('../middlewares/demoMode');
 const User = require('../models/userModel');
 
 router

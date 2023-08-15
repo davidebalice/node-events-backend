@@ -1,7 +1,7 @@
 const Event = require('../models/eventModel');
 const User = require('../models/userModel');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/error');
+const catchAsync = require('../middlewares/catchAsync');
+const AppError = require('../middlewares/error');
 
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;

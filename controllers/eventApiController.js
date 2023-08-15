@@ -2,12 +2,13 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const sharp = require('sharp');
 const Event = require('../models/eventModel');
-const ApiQuery = require('../utils/apiquery');
-const AppError = require('../utils/error');
-const catchAsync = require('../utils/catchAsync');
+const ApiQuery = require('../middlewares/apiquery');
+const AppError = require('../middlewares/error');
+const catchAsync = require('../middlewares/catchAsync');
 const factory = require('./handlerFactory');
 const fs = require('fs');
 const path = require('path');
+const { parseISO, format, startOfMonth, endOfMonth } = require('date-fns');
 
 exports.getAllEvents = catchAsync(async (req, res, next) => {
   let filterData = {};
@@ -16,13 +17,10 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
     filterData = { name: { $regex: regex } };
   }
   const page = req.query.page * 1 || 1;
-  const setLimit = 1;
+  const setLimit = 30;
   const limit = req.query.limit * 1 || setLimit;
   const skip = (page - 1) * limit;
-  const events = await Event.find(filterData)
-    .sort('-createdAt')
-    .skip(skip)
-    .limit(limit);
+  const events = await Event.find(filterData).sort('-createdAt').skip(skip).limit(limit);
   const count = await Event.countDocuments();
   const totalPages = Math.ceil(count / limit);
   let message = '';
@@ -70,4 +68,33 @@ exports.getEvent = catchAsync(async (req, res, next) => {
       mesage: 'invalid id',
     });
   }
+});
+
+exports.updateDateForDemo = catchAsync(async (req, res, next) => {
+  const events = await Event.find();
+  const currentMonth = new Date().getMonth();
+
+  function isValidDate(date) {
+    return date instanceof Date && !isNaN(date);
+  }
+
+  for (const event of events) {
+    event.startDate.setMonth(currentMonth);
+    let formattedStartDate = format(event.startDate, 'yyyy-MM-dd HH:mm');
+
+    let updateObj = { startDate: formattedStartDate };
+
+    if (isValidDate(event.endDate)) {
+      event.endDate.setMonth(currentMonth);
+      let formattedEndDate = format(event.endDate, 'yyyy-MM-dd HH:mm');
+      event.startDate = formattedStartDate;
+      event.endDate = formattedEndDate;
+      updateObj = { startDate: formattedStartDate, endDate: formattedEndDate };
+    } else {
+      event.startDate = formattedStartDate;
+    }
+
+    await Event.updateOne({ _id: event._id }, updateObj);
+  }
+  res.json({ message: 'Date updated' });
 });

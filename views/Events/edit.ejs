@@ -107,7 +107,7 @@
               >
               <option value=""> - Select - </option>
               <% for (let category of categories) { %>
-                <option value="<%= category._id %>" <%= category._id.toString() === formData.category.toString() ? 'selected' : '' %>><%= category.name %></option>
+                <option value="<%= category._id %>" <%= category._id.toString() === (formData.category ?? '').toString() ? 'selected' : '' %>><%= category.name %></option>
               <% } %>
               </select>
             </div>
