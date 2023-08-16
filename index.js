@@ -10,11 +10,10 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE;
 const cors = require('cors');
-const collectionName = 'users';
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL,
     optionsSuccessStatus: 200,
   })
 );
@@ -24,8 +23,6 @@ mongoose
     useNewUrlParser: true,
   })
   .then(() => {
-    //Events.syncIndexes();
-    //Users.syncIndexes();
     console.log('DB connections successfully');
   })
   .catch((err) => {
@@ -74,7 +71,7 @@ app.use(flash());
 app.use(
   i18n({
     translationsPath: path.join(__dirname, 'i18n'),
-    siteLangs: ['es', 'en', 'de', 'ru', 'it', 'fr'],
+    siteLangs: ['en', 'it'],
     textsVarName: 'translation',
   })
 );

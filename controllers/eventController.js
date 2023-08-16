@@ -40,7 +40,7 @@ exports.resizeImage = catchAsync(async (req, res, next) => {
     .resize(2000, 1333)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/events/${req.body.imageCover}`);
+    .toFile(`public/assets/images/events/${req.body.imageCover}`);
 
   next();
 });
@@ -55,7 +55,7 @@ exports.resizeGallery = catchAsync(async (req, res, next) => {
         .resize(2000, 1333)
         .toFormat('jpeg')
         .jpeg({ quality: 90 })
-        .toFile(`public/img/events/${filename}`);
+        .toFile(`public/assets/images/events/${filename}`);
       req.body.images.push(filename);
     })
   );
@@ -243,7 +243,7 @@ exports.deleteGallery = catchAsync(async (req, res, next) => {
 
   const doc = await Event.updateOne({ _id: req.body.id }, { $set: { images: query.images } });
 
-  let pathFile = path.join(__dirname, '/public/img/events', image);
+  let pathFile = path.join(__dirname, '/public/assets/images/events', image);
   pathFile = pathFile.replace('controllers', '');
 
   if (fs.existsSync(pathFile)) {

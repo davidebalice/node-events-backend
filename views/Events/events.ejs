@@ -76,7 +76,7 @@
               <tr>
                 <td>
                   <div class="form-check form-switch">
-                    <input class="form-check-input activeSwtich" type="checkbox" role="switch" data-item-id="active_<%=
+                    <input class="form-check-input activeSwtich" type="checkbox" role="switch" id="active_<%= event._id %>" data-item-id="active_<%=
                     event._id %>" // prettier-ignore <% if (event.active) { %>checked<% } %> id="active_<%= event._id
                     %>" />
                   </div>
@@ -84,7 +84,7 @@
                 <td>
                   <a href="/event/photo/<%= event._id %>" data-toggle="tooltip" data-placement="top" title="Photo">
                     <img
-                      src="<%= process.env.NODE_URL %>/img/events/<%= event.imageCover %>"
+                      src="<%= process.env.NODE_URL %>/assets/images/events/<%= event.imageCover %>"
                       style="width: 120px; height: auto"
                       onerror="this.onerror=null;this.src='/placeholder.jpg';"
                   /></a>

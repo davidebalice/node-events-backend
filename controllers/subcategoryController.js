@@ -18,23 +18,27 @@ exports.getAllSubcategories = catchAsync(async (req, res, next) => {
     const regex = new RegExp(req.query.key, 'i');
     filterData.name = { $regex: regex };
   }
+
   if (req.query.category) {
     queryCat = req.query.category;
     filterData.category = req.query.category;
+  } else {
+    const firstCategory = await Category.findOne().sort({ order: 1 });
+    if (firstCategory) {
+      queryCat = firstCategory._id.toString();
+      filterData.category = firstCategory;
+    }
   }
+
   const setLimit = 20;
   const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
   const skip = (page - 1) * limit;
   const categories = await Category.find().sort({ order: 1 });
-  const subcategories = await Subcategory.find(filterData)
-    .sort('order')
-    .skip(skip)
-    .limit(limit)
-    .populate({
-      path: 'category',
-      select: 'name',
-    });
+  const subcategories = await Subcategory.find(filterData).sort('order').skip(skip).limit(limit).populate({
+    path: 'category',
+    select: 'name',
+  });
 
   const count = await Subcategory.countDocuments();
   const totalPages = Math.ceil(count / limit);
@@ -53,7 +57,6 @@ exports.getAllSubcategories = catchAsync(async (req, res, next) => {
   if (viewType === 'json') {
     res.json(subcategories);
   } else {
-    console.log(subcategories);
     res.render('Subcategories/subcategories', {
       title: 'Subcategories',
       subcategories,
@@ -144,27 +147,21 @@ exports.updateSubcategory = catchAsync(async (req, res, next) => {
 
 exports.moveSubcategory = catchAsync(async (req, res, next) => {
   try {
-    const { subcategoryId, direction } = req.body;
-
+    const { subcategoryId, direction, category } = req.body;
     const subcategory = await Subcategory.findById(subcategoryId);
 
     if (!subcategory) {
       return res.status(404).json({ message: 'Subcategory not found' });
     }
 
-    const subcategories = await Subcategory.find().sort({ order: 1 }).exec();
-    const currentIndex = subcategories.findIndex(
-      (subcat) => subcat.id === subcategoryId
-    );
+    const subcategories = await Subcategory.find({ category }).sort({ order: 1 }).exec();
+    const currentIndex = subcategories.findIndex((subcat) => subcat.id === subcategoryId);
 
     if (direction === 'up' && currentIndex > 0) {
       const tempOrder = subcategories[currentIndex].order;
       subcategories[currentIndex].order = subcategories[currentIndex - 1].order;
       subcategories[currentIndex - 1].order = tempOrder;
-    } else if (
-      direction === 'down' &&
-      currentIndex < subcategories.length - 1
-    ) {
+    } else if (direction === 'down' && currentIndex < subcategories.length - 1) {
       const tempOrder = subcategories[currentIndex].order;
       subcategories[currentIndex].order = subcategories[currentIndex + 1].order;
       subcategories[currentIndex + 1].order = tempOrder;
@@ -179,12 +176,7 @@ exports.moveSubcategory = catchAsync(async (req, res, next) => {
     });
 
     await Promise.all(
-      subcategories.map((subcat) =>
-        Subcategory.findOneAndUpdate(
-          { _id: subcat._id },
-          { order: subcat.order }
-        )
-      )
+      subcategories.map((subcat) => Subcategory.findOneAndUpdate({ _id: subcat._id }, { order: subcat.order }))
     );
 
     res.status(200).json({ message: 'ok' });

@@ -12,9 +12,15 @@ const { parseISO, format, startOfMonth, endOfMonth } = require('date-fns');
 
 exports.getAllEvents = catchAsync(async (req, res, next) => {
   let filterData = {};
+
   if (req.query.key) {
     const regex = new RegExp(req.query.key, 'i');
-    filterData = { name: { $regex: regex } };
+    filterData = {
+      name: { $regex: regex },
+      active: true,
+    };
+  } else {
+    filterData = { active: true };
   }
   const page = req.query.page * 1 || 1;
   const setLimit = 30;
@@ -49,11 +55,8 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
 
 exports.getEvent = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  console.log(id);
-  const event = await Event.findOne({ _id: id });
+  const event = await Event.findOne({ _id: id, active: true });
   const count = await Event.countDocuments();
-
-  console.log(event);
 
   if (event) {
     res.status(200).json({

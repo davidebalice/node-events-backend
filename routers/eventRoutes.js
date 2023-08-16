@@ -5,14 +5,16 @@ const authController = require('../controllers/authController');
 const reviewRouter = require('./reviewRoutes');
 const demoMode = require('../middlewares/demoMode');
 const User = require('../models/userModel');
+const Event = require('../models/eventModel');
 const Category = require('../models/categoryModel');
 
 router.use('/:eventId/reviews', reviewRouter);
 
 router.route('/').get(authController.protect, async function (req, res) {
-  const users = await User.find().limit(6);
+  const users = await User.find().sort({ createdAt: -1 }).limit(6);
+  const events = await Event.find().sort({ createdAt: -1 }).limit(6);
   res.locals = { title: 'Dashboard', currentUser: res.locals.currentUser };
-  res.render('Dashboard/index', { users: users });
+  res.render('Dashboard/index', { users, events });
 });
 
 router.route('/events').get(authController.protect, eventController.getAllEvents);

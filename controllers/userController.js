@@ -229,7 +229,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 exports.photoUser = catchAsync(async (req, res, next) => {
   let query = await User.findById(req.params.id);
 
-  // if (popOptions) query = query.populate(popOptions);
   const doc = await query;
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));

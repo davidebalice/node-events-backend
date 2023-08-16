@@ -68,7 +68,7 @@
             <div class="col-md-10">
               <input class="form-control" type="file" name="imageCover" />
               <img
-                src="<%= process.env.NODE_URL %>/img/events/<%= formData.imageCover %>"
+                src="<%= process.env.NODE_URL %>/assets/images/events/<%= formData.imageCover %>"
                 style="width: 280px; height: auto; margin-top: 40px"
                 onerror="this.onerror=null;this.src='/placeholder.jpg';"
               />
@@ -149,7 +149,7 @@
               <% formData.images.forEach(function(image) { %>
               <div style=" width: fit-content;">
                 <img
-                  src="/img/events/<%= image %>"
+                  src="/assets/images/events/<%= image %>"
                   alt="Immagine"
                   style="width: 210px"
                 />

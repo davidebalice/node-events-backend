@@ -36,7 +36,7 @@ exports.resizeImage = catchAsync(async (req, res, next) => {
     .resize(2000, 1333)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/category/${req.body.imageCover}`);
+    .toFile(`public/assets/images/category/${req.body.imageCover}`);
 
   next();
 });

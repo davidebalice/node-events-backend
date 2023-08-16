@@ -29,7 +29,7 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <div class="row mb-2 justify-content-between">
+        <div class="row mb-2 justify-content-start">
           <div class="col-auto">
             <div class="text-sm-start">
               <a href="/add/subcategory">
@@ -42,7 +42,7 @@
               </a>
             </div>
           </div>
-          <div class="col-auto">
+          <div class="col-auto ms-5">
             <div class="search-box me-2 mb-2">
                 <form
                   method="get"
@@ -53,7 +53,7 @@
                   class="form-select me-2" 
                   id="categorySelect"
                   name="category"
-                  style="max-width: 180px;height: 42px;"
+                  style="max-width: 250px;height: 42px;"
                 >
                 <option value=""> - Select category - </option>
                 <% for (let category of categories) { %>
@@ -136,7 +136,7 @@
                         <% } else { %>
                         <a
                           href="#"
-                          onclick="moveSubcategory('<%= subcategory._id %>', 'up')"
+                          onclick="moveSubcategory('<%= subcategory._id %>', 'up', '<%= subcategory.category._id.toString() %>')"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -165,7 +165,7 @@
 
                         <a
                           href="#"
-                          onclick="moveSubcategory('<%= subcategory._id %>', 'down')"
+                          onclick="moveSubcategory('<%= subcategory._id %>', 'down', '<%= subcategory.category._id.toString() %>')"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
@@ -246,7 +246,7 @@
     });
   });
 
-  async function moveSubcategory(subcategoryId, direction) {
+  async function moveSubcategory(subcategoryId, direction, category) {
     try {
       const response = await fetch(`/move/subcategory`, {
         method: 'POST',
@@ -258,6 +258,7 @@
         body: JSON.stringify({
           subcategoryId,
           direction,
+          category,
         }),
       });
       if (response.ok) {
