@@ -18,7 +18,7 @@
     </div>
   </div>
 </div>
-
+<%- include ('../Partials/FlashMessage') %>
 <%- contentFor('body') %> <% if (message && message.length > 0) { %>
 <ul class="errors">
   <%= message %>

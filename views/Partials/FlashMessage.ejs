@@ -1,0 +1,24 @@
+<% if (flashMessage && flashMessage.length > 0) { %>
+<div class="flashMessage">
+  <p class="flashMessageX">X</p>
+  <%= flashMessage %>
+</div>
+<% } %>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var flashMessageElement = document.querySelector('.flashMessage');
+    var flashMessageXElement = document.querySelector('.flashMessageX');
+
+    setTimeout(function () {
+      if (flashMessageElement) {
+        flashMessageElement.style.display = 'none';
+      }
+    }, 6000);
+
+    if (flashMessageElement && flashMessageXElement) {
+      flashMessageXElement.addEventListener('click', function () {
+        flashMessageElement.style.display = 'none';
+      });
+    }
+  });
+</script>

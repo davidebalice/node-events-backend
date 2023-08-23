@@ -51,10 +51,7 @@ exports.getAllCategories = catchAsync(async (req, res, next) => {
   const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
   const skip = (page - 1) * limit;
-  const categories = await Category.find(filterData)
-    .sort('order')
-    .skip(skip)
-    .limit(limit);
+  const categories = await Category.find(filterData).sort('order').skip(skip).limit(limit);
   const count = await Category.countDocuments();
   const totalPages = Math.ceil(count / limit);
 
@@ -68,6 +65,8 @@ exports.getAllCategories = catchAsync(async (req, res, next) => {
   }
 
   //?viewType=json
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   const viewType = req.query.viewType;
   if (viewType === 'json') {
     console.log(categories);
@@ -81,13 +80,16 @@ exports.getAllCategories = catchAsync(async (req, res, next) => {
       limit,
       totalPages,
       message,
+      flashMessage: flashMessage || null,
     });
   }
 });
 
 exports.addCategory = catchAsync(async (req, res, next) => {
   res.locals = { title: 'Add category' };
-  res.render('Categories/add', { formData: '', message: '' });
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+  res.render('Categories/add', { formData: '', message: '', flashMessage: flashMessage || null });
 });
 
 exports.createCategory = catchAsync(async (req, res, next) => {
@@ -110,6 +112,8 @@ exports.deleteCategory = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.redirect('/categories?m=2');
 });
 
@@ -124,12 +128,16 @@ exports.editCategory = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
 
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   let message = '';
   res.render('Categories/edit', {
     status: 200,
     title: 'Edit category',
     formData: doc,
     message: message,
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -151,12 +159,17 @@ exports.photoCategory = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   let message = '';
   res.render('Categories/photo', {
     status: 200,
     title: 'Photo category',
     formData: doc,
     message: message,
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -201,11 +214,7 @@ exports.moveCategory = catchAsync(async (req, res, next) => {
       cat.order = index + 1;
     });
 
-    await Promise.all(
-      categories.map((cat) =>
-        Category.findOneAndUpdate({ _id: cat._id }, { order: cat.order })
-      )
-    );
+    await Promise.all(categories.map((cat) => Category.findOneAndUpdate({ _id: cat._id }, { order: cat.order })));
 
     res.status(200).json({ message: 'ok' });
   } catch (err) {

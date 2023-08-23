@@ -2,9 +2,7 @@
 
 <div class="row">
   <div class="col-12">
-    <div
-      class="page-title-box d-flex align-items-center justify-content-between"
-    >
+    <div class="page-title-box d-flex align-items-center justify-content-between">
       <h4 class="mb-0">Categories</h4>
 
       <div class="page-title-right">
@@ -18,7 +16,7 @@
     </div>
   </div>
 </div>
-
+<%- include ('../Partials/FlashMessage') %> 
 <% if (message && message.length > 0) { %>
 <ul class="errors">
   <%= message %>
@@ -33,10 +31,7 @@
           <div class="col-sm-8">
             <div class="text-sm-start">
               <a href="/add/category">
-                <button
-                  type="button"
-                  class="btn btn-success waves-effect waves-light mb-2 me-2"
-                >
+                <button type="button" class="btn btn-success waves-effect waves-light mb-2 me-2">
                   <i class="mdi mdi-plus me-1"></i> New category
                 </button>
               </a>
@@ -45,11 +40,7 @@
           <div class="col-sm-4">
             <div class="search-box me-2 mb-2 d-inline-block">
               <div class="position-relative">
-                <form
-                  method="get"
-                  action="/categories"
-                  class="row flex-row flex-nowrap"
-                >
+                <form method="get" action="/categories" class="row flex-row flex-nowrap">
                   <input
                     type="text"
                     class="form-control col-8 inputSearch"
@@ -80,15 +71,13 @@
               </tr>
             </thead>
             <tbody>
-              <%- contentFor('body') %> <% if (categories.length > 0) { %> <%
-              categories.forEach(function(category) { %>
+              <%- contentFor('body') %> <% if (categories.length > 0) { %> <% categories.forEach(function(category) { %>
               <tr>
                 <td>
                   <div class="form-check form-switch">
-                    <input class="form-check-input activeSwtich" type="checkbox"
-                    role="switch" data-item-id="active_<%= category._id %>"
-                    //prettier-ignore <% if (category.active) { %>checked<% } %>
-                    id="active_<%= category._id %>" />
+                    <input class="form-check-input activeSwtich" type="checkbox" role="switch" data-item-id="active_<%=
+                    category._id %>" //prettier-ignore <% if (category.active) { %>checked<% } %> id="active_<%=
+                    category._id %>" />
                   </div>
                 </td>
                 <td>
@@ -139,10 +128,7 @@
                           data-toggle="tooltip"
                           data-placement="top"
                           title="Move top"
-                          ><i
-                            class="mdi mdi-arrow-up font-size-22"
-                            style="color: #d1d1d1"
-                          ></i
+                          ><i class="mdi mdi-arrow-up font-size-22" style="color: #d1d1d1"></i
                         ></a>
                         <% } else { %>
                         <a
@@ -166,10 +152,7 @@
                           data-toggle="tooltip"
                           data-placement="top"
                           title="Move down"
-                          ><i
-                            class="mdi mdi-arrow-down font-size-22"
-                            style="color: #d1d1d1"
-                          ></i
+                          ><i class="mdi mdi-arrow-down font-size-22" style="color: #d1d1d1"></i
                         ></a>
 
                         <% } else { %>
@@ -219,8 +202,7 @@
             </tbody>
           </table>
         </div>
-        <%- include('./../Partials/Pagination', { totalPages, currentPage,
-        limit, page, pageName:'categories' }) %>
+        <%- include('./../Partials/Pagination', { totalPages, currentPage, limit, page, pageName:'categories' }) %>
       </div>
     </div>
   </div>

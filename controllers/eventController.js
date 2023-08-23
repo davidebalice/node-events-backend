@@ -90,6 +90,8 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
       message = 'Event deleted';
     }
   }
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.render('Events/events', {
     title: 'Events',
     events: formattedEvents,
@@ -98,16 +100,20 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
     limit,
     totalPages,
     message,
+    flashMessage: flashMessage || null,
   });
 });
 
 exports.addEvent = catchAsync(async (req, res, next) => {
   const categories = await Category.find({}).sort({ order: 1 });
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.locals = { title: 'Add event' };
   res.render('Events/add', {
     formData: '',
     message: '',
     categories: categories,
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -142,6 +148,8 @@ exports.deleteEvent = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.redirect('/events?m=2');
 });
 
@@ -150,9 +158,6 @@ exports.getEvent = factory.getOne(Event, { path: 'reviews' });
 exports.editEvent = catchAsync(async (req, res, next) => {
   let query = await Event.findById(req.params.id);
   const doc = await query;
-
-  console.log('doc.category');
-  console.log(doc.category);
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
@@ -172,6 +177,9 @@ exports.editEvent = catchAsync(async (req, res, next) => {
   const categories = await Category.find().sort({ order: 1 });
   const subcategories = await Subcategory.find({ category: doc.category }).sort({ order: 1 });
 
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   let message = '';
   res.render('Events/edit', {
     status: 200,
@@ -182,6 +190,7 @@ exports.editEvent = catchAsync(async (req, res, next) => {
     message,
     categories,
     subcategories,
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -203,11 +212,14 @@ exports.photoEvent = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
   let message = '';
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.render('Events/photo', {
     status: 200,
     title: 'Photo event',
     formData: doc,
     message: message,
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -252,7 +264,8 @@ exports.deleteGallery = catchAsync(async (req, res, next) => {
   } else {
     console.log('File not exists:', image);
   }
-
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.redirect('/event/photo/' + req.body.id);
 });
 
@@ -264,11 +277,14 @@ exports.locationEvent = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
   let message = '';
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.render('Events/location', {
     status: 200,
     title: 'Location event',
     formData: doc,
     message: message,
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -277,8 +293,7 @@ exports.updateLocation = catchAsync(async (req, res, next) => {
 
   let longitude = coordinates[0];
   let latitude = coordinates[1];
-  console.log(longitude);
-  console.log(latitude);
+ 
   if (longitude === null || longitude === '' || longitude === NaN || longitude === undefined) {
     longitude = 0;
   }

@@ -8,15 +8,10 @@ const AppError = require('../middlewares/error');
 const Email = require('../middlewares/email');
 const User = require('../models/userModel');
 
-const DEMO_MODE = process.env.DEMO_MODE === true;
-
 function redirectToLogin(req, res, error = null, message = null) {
-  res.render('Auth/auth-login', {
-    title: 'Login',
-    DEMO_MODE: process.env.DEMO_MODE,
-    message: message || req.flash('message'),
-    error: error || req.flash('error'),
-  });
+  if (!req.user) {
+    return res.redirect('/login');
+  }
 }
 
 const signToken = (id) =>
@@ -57,7 +52,6 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email);
   if (!email || !password) {
     req.flash('error', 'Please insert email and password');
     return redirectToLogin(req, res);
@@ -158,7 +152,6 @@ exports.restrictTo =
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
-  console.log(req.body.email);
   if (!user) {
     return next(new AppError('There in no user with email address', 404));
   }

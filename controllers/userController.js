@@ -61,6 +61,10 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find(filterData).sort('-createdAt').skip(skip).limit(limit);
   const count = await User.countDocuments();
   const totalPages = Math.ceil(count / limit);
+
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   let message = '';
   if (req.query.m) {
     if (req.query.m === '1') {
@@ -76,7 +80,15 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     limit,
     totalPages,
     message,
+    flashMessage: flashMessage || null,
   });
+});
+
+exports.addUser = catchAsync(async (req, res, next) => {
+  res.locals = { title: 'Add user', currentUser: res.locals.currentUser };
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+  res.render('Users/add', { formData: '', message: '', flashMessage: flashMessage || null });
 });
 
 exports.editUser = catchAsync(async (req, res, next) => {
@@ -88,11 +100,16 @@ exports.editUser = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
   let message = '';
+
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   res.render('Users/edit', {
     status: 200,
     title: 'Edit user',
     formData: doc,
     message: message,
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -112,7 +129,6 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 exports.photoUser = catchAsync(async (req, res, next) => {
   let query = await User.findById(req.params.id);
 
-  // if (popOptions) query = query.populate(popOptions);
   const doc = await query;
 
   if (!doc) {
@@ -143,11 +159,15 @@ exports.createUser = catchAsync(async (req, res, next) => {
     await User.create(req.body);
     res.redirect('/users?m=1');
   } catch (err) {
+    const flashMessage = req.session.flashMessage;
+    req.session.flashMessage = null;
+
     res.render('Users/add', {
       status: 200,
       title: 'Add user',
       formData: req.body,
       message: err.message,
+      flashMessage: flashMessage || null,
     });
   }
 });
@@ -157,10 +177,10 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.redirect('/users?m=2');
 });
-
-//$2a$12$YaT9qvMZR3HfeqEz5OfSGOQGKrKG/dTH2DDBSI0FfMErkjfZdyUfC
 
 exports.editPassword = catchAsync(async (req, res, next) => {
   let query = await User.findById(req.params.id).select('+password');
@@ -169,11 +189,15 @@ exports.editPassword = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
 
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   res.render('Users/password', {
     status: 200,
     title: 'Edit password',
     formData: doc,
     message: '',
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -205,23 +229,31 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
       return next(new AppError('No document found with that ID', 404));
     }
 
+    const flashMessage = req.session.flashMessage;
+    req.session.flashMessage = null;
+
     const message = 'Password updated';
     res.render('Users/password', {
       status: 200,
       title: 'Update password',
       formData: doc,
       message: message,
+      flashMessage: flashMessage || null,
     });
   } catch (err) {
     const doc = await User.findById(req.params.id, req.body);
     if (!doc) {
       return next(new AppError('No document found with that ID', 404));
     }
+    const flashMessage = req.session.flashMessage;
+    req.session.flashMessage = null;
+
     res.render('Users/password', {
       status: 500,
       title: 'Update password',
       formData: doc,
       message: err.message,
+      flashMessage: flashMessage || null,
     });
   }
 });
@@ -233,17 +265,25 @@ exports.photoUser = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   let message = '';
   res.render('Users/photo', {
     status: 200,
     title: 'Photo user',
     formData: doc,
     message: message,
+    flashMessage: flashMessage || null,
   });
 });
 
 exports.profile = catchAsync(async (req, res, next) => {
   const user = req.user;
+
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
 
   res.render('Users/profile', {
     title: 'Profile',
@@ -251,6 +291,7 @@ exports.profile = catchAsync(async (req, res, next) => {
     DEMO_MODE: process.env.DEMO_MODE,
     message: req.flash('message'),
     error: req.flash('error'),
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -270,17 +311,24 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   req.flash('message', 'Profile updated successfully');
   req.flash('error', 'Error during update');
 
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   res.render('Users/profile', {
     title: 'Profile',
     formData: updatedUser,
     DEMO_MODE: process.env.DEMO_MODE,
     message: req.flash('message'),
     error: req.flash('error'),
+    flashMessage: flashMessage || null,
   });
 });
 
 exports.passwordMe = catchAsync(async (req, res, next) => {
   const user = req.user;
+
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
 
   res.render('Users/passwordMe', {
     title: 'Change password',
@@ -288,6 +336,7 @@ exports.passwordMe = catchAsync(async (req, res, next) => {
     DEMO_MODE: process.env.DEMO_MODE,
     message: req.flash('message'),
     error: req.flash('error'),
+    flashMessage: flashMessage || null,
   });
 });
 
@@ -297,22 +346,30 @@ exports.updatePasswordMe = catchAsync(async (req, res, next) => {
     const { password, passwordConfirm, oldPassword } = req.body;
 
     if (password !== passwordConfirm) {
+      const flashMessage = req.session.flashMessage;
+      req.session.flashMessage = null;
+
       return res.render('Users/passwordMe', {
         status: 400,
         title: 'Update password',
         formData: user,
         message: 'Password not match',
+        flashMessage: flashMessage || null,
       });
     }
 
     const isOldPasswordCorrect = await user.correctPassword(oldPassword, user.password);
 
     if (!isOldPasswordCorrect) {
+      const flashMessage = req.session.flashMessage;
+      req.session.flashMessage = null;
+
       return res.render('Users/passwordMe', {
         status: 400,
         title: 'Update password',
         formData: user,
         message: 'Old password is incorrect',
+        flashMessage: flashMessage || null,
       });
     }
 
@@ -331,23 +388,32 @@ exports.updatePasswordMe = catchAsync(async (req, res, next) => {
       return next(new AppError('No document found with that ID', 404));
     }
 
+    const flashMessage = req.session.flashMessage;
+    req.session.flashMessage = null;
+
     const message = 'Password updated';
     res.render('Users/passwordMe', {
       status: 200,
       title: 'Update password',
       formData: doc,
       message: message,
+      flashMessage: flashMessage || null,
     });
   } catch (err) {
     const doc = await User.findById(user._id, req.body);
     if (!doc) {
       return next(new AppError('No document found with that ID', 404));
     }
+
+    const flashMessage = req.session.flashMessage;
+    req.session.flashMessage = null;
+
     res.render('Users/passwordMe', {
       status: 500,
       title: 'Update password',
       formData: user,
       message: err.message,
+      flashMessage: flashMessage || null,
     });
   }
 });

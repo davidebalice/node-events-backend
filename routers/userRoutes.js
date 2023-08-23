@@ -12,7 +12,13 @@ router.use(authController.protect);
 
 router.patch('/updateMyPassword', authController.updatePassword);
 
-router.post('/updateMe', userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
+router.post(
+  '/updateMe',
+  demoMode,
+  userController.uploadUserPhoto,
+  userController.resizeUserPhoto,
+  userController.updateMe
+);
 
 router.route('/forgotPassword').post(demoMode, authController.forgotPassword);
 router.route('/resetPassword/:token').patch(demoMode, authController.resetPassword);
@@ -29,15 +35,12 @@ router.route('/users').get(userController.getAllUsers).post(demoMode, userContro
 
 router
   .route('/add/user')
-  .get(authController.protect, function (req, res) {
-    res.locals = { title: 'Add user', currentUser: res.locals.currentUser };
-    res.render('Users/add', { formData: '', message: '' });
-  })
+  .get(authController.protect, userController.addUser)
   .post(demoMode, authController.protect, authController.restrictTo('admin', 'lead-guide'), userController.createUser);
 
 router
   .route('/user/:id')
-  .get(userController.editUser)
+  .get(authController.protect, userController.editUser)
   .post(demoMode, authController.protect, authController.restrictTo('admin', 'lead-guide'), userController.updateUser);
 
 router
