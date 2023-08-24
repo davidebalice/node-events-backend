@@ -56,6 +56,7 @@
                 type="text"
                 value="<%= formData && formData.name ? formData.name : '' %>"
                 name="name"
+                required
               />
             </div>
           </div>
@@ -70,6 +71,7 @@
                 type="text"
                 value="<%= formData && formData.surname ? formData.surname : '' %>"
                 name="surname"
+                required
               />
             </div>
           </div>
@@ -84,6 +86,7 @@
                 type="text"
                 value="<%= formData && formData.email ? formData.email : '' %>"
                 name="email"
+                required
               />
             </div>
           </div>
@@ -93,7 +96,7 @@
               Role<b style="color:red">*</b>
             </label>
             <div class="col-md-10">
-              <select class="form-select" name="role">
+              <select class="form-select" name="role" required>
                 <option>- Select -</option>
                 <option value="user" <%= formData && formData.role === 'user' ? ' selected ' : '' %>>User</option>
                 <option value="guide" <%= formData && formData.role === 'guide' ? ' selected ' : '' %>>Guide</option>

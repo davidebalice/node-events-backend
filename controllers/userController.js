@@ -55,10 +55,11 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     const regex = new RegExp(req.query.key, 'i');
     filterData = { name: { $regex: regex } };
   }
+  const setLimit = 20;
+  const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 10;
   const skip = (page - 1) * limit;
-  const users = await User.find(filterData).sort('-createdAt').skip(skip).limit(limit);
+  const users = await User.find(filterData).sort({ createdAt: -1, surname: 1 }).skip(skip).limit(limit);
   const count = await User.countDocuments();
   const totalPages = Math.ceil(count / limit);
 
@@ -79,6 +80,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     page,
     limit,
     totalPages,
+    currentPage: page,
     message,
     flashMessage: flashMessage || null,
   });
@@ -88,7 +90,11 @@ exports.addUser = catchAsync(async (req, res, next) => {
   res.locals = { title: 'Add user', currentUser: res.locals.currentUser };
   const flashMessage = req.session.flashMessage;
   req.session.flashMessage = null;
-  res.render('Users/add', { formData: '', message: '', flashMessage: flashMessage || null });
+  res.render('Users/add', {
+    formData: '',
+    message: '',
+    flashMessage: flashMessage || null,
+  });
 });
 
 exports.editUser = catchAsync(async (req, res, next) => {

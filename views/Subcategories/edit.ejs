@@ -2,9 +2,7 @@
 
 <div class="row">
   <div class="col-12">
-    <div
-      class="page-title-box d-flex align-items-center justify-content-between"
-    >
+    <div class="page-title-box d-flex align-items-center justify-content-between">
       <h4 class="mb-0">Edit category</h4>
 
       <div class="page-title-right">
@@ -18,8 +16,7 @@
     </div>
   </div>
 </div>
-<%- include ('../Partials/FlashMessage') %>
-<%- contentFor('body') %> <% if (message && message.length > 0) { %>
+<%- include ('../Partials/FlashMessage') %> <%- contentFor('body') %> <% if (message && message.length > 0) { %>
 <ul class="errors">
   <%= message %>
 </ul>
@@ -30,14 +27,8 @@
     <div class="card">
       <div class="card-header">
         <a href="/subcategories" class="back-button">
-          <button
-            type="button"
-            class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
-          >
-            <i
-              class="mdi mdi-arrow-left-thick me-1"
-              style="font-size: 14px"
-            ></i>
+          <button type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
+            <i class="mdi mdi-arrow-left-thick me-1" style="font-size: 14px"></i>
             Back
           </button>
         </a>
@@ -47,7 +38,7 @@
         <div class="card-body">
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
-              Category<b style="color: red">*</b>
+              Subcategory<b style="color: red">*</b>
             </label>
             <div class="col-md-10">
               <input
@@ -55,14 +46,29 @@
                 type="text"
                 value="<%= formData && formData.name ? formData.name : '' %>"
                 name="name"
+                required
               />
+            </div>
+          </div>
+          
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Category<b style="color: red">*</b>
+            </label>
+            <div class="col-md-10">
+              <select class="form-select" id="categorySelect" name="category" style="max-width: 200px" required>
+                <option value="">- Select -</option>
+                <% for (let category of categories) { %>
+                <option value="<%= category._id %>" <%= category._id.toString() === formData.category.toString() ? 'selected' : '' %>>
+                  <%= category.name %>
+                </option>
+                <% } %>
+              </select>
             </div>
           </div>
 
           <div class="mb-3 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-              Description<b style="color: red">*</b>
-            </label>
+            <label for="example-text-input" class="col-md-2 col-form-label"> Description </label>
             <div class="col-md-10">
               <textarea id="ckeditor-classic" name="description">
 <%= formData && formData.description ? formData.description : '' %></textarea
@@ -71,8 +77,7 @@
           </div>
 
           <div class="mt-4 row">
-            <label for="example-text-input" class="col-md-2 col-form-label">
-            </label>
+            <label for="example-text-input" class="col-md-2 col-form-label"> </label>
             <div class="col-md-10">
               <button type="submit" class="btn btn-primary w-md">Save</button>
             </div>

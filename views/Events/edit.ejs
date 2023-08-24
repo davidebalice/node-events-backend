@@ -74,6 +74,7 @@
                 type="date"
                 value="<%= formattedStartDate %>"
                 name="startDate"
+                required
               />
             </div>
           </div>
@@ -89,6 +90,7 @@
                 type="date"
                 value="<%= formattedEndDate %>"
                 name="endDate"
+                required
               />
             </div>
           </div>
@@ -104,6 +106,7 @@
                 id="categorySelect"
                 name="category"
                 style="max-width: 200px"
+                required
               >
               <option value=""> - Select - </option>
               <% for (let category of categories) { %>
@@ -142,6 +145,7 @@
                 type="text"
                 value="<%= formData && formData.name ? formData.name : '' %>"
                 name="name"
+                required
               />
             </div>
           </div>
@@ -151,7 +155,7 @@
               Short description<b style="color:red">*</b>
             </label>
             <div class="col-md-10">
-              <textarea id="ckeditor-classic-short" name="summary"><%= formData && formData.summary ? formData.summary : '' %></textarea>
+              <textarea id="ckeditor-classic-short" name="summary" required><%= formData && formData.summary ? formData.summary : '' %></textarea>
             </div>
           </div>
 
@@ -160,7 +164,7 @@
               Long description<b style="color:red">*</b>
             </label>
             <div class="col-md-10">
-              <textarea id="ckeditor-classic" name="description"><%= formData && formData.description ? formData.description : '' %></textarea>
+              <textarea id="ckeditor-classic" name="description" required><%= formData && formData.description ? formData.description : '' %></textarea>
             </div>
           </div>
 

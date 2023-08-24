@@ -66,7 +66,7 @@
               Main photo<b style="color: red">*</b>
             </label>
             <div class="col-md-10">
-              <input class="form-control" type="file" name="imageCover" />
+              <input class="form-control" type="file" name="imageCover" required/>
               <img
                 src="<%= process.env.NODE_URL %>/assets/images/events/<%= formData.imageCover %>"
                 style="width: 280px; height: auto; margin-top: 40px"
@@ -129,7 +129,7 @@
               Gallery upload (multiple select)<b style="color: red">*</b>
             </label>
             <div class="col-md-10">
-              <input class="form-control" type="file" name="images" multiple />
+              <input class="form-control" type="file" name="images" multiple required />
             </div>
           </div>
         </form>

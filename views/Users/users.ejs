@@ -2,9 +2,7 @@
 
 <div class="row">
   <div class="col-12">
-    <div
-      class="page-title-box d-flex align-items-center justify-content-between"
-    >
+    <div class="page-title-box d-flex align-items-center justify-content-between">
       <h4 class="mb-0">User List</h4>
 
       <div class="page-title-right">
@@ -22,8 +20,7 @@
     </div>
   </div>
 </div>
-<%- include ('../Partials/FlashMessage') %>
-<% if (message && message.length > 0) { %>
+<%- include ('../Partials/FlashMessage') %> <% if (message && message.length > 0) { %>
 <ul class="errors">
   <%= message %>
 </ul>
@@ -36,9 +33,7 @@
         <div class="row mb-2">
           <div class="col-md-6">
             <div class="mb-3">
-              <a
-                href="/add/user"
-                class="btn btn-success waves-effect waves-light"
+              <a href="/add/user" class="btn btn-success waves-effect waves-light"
                 ><i class="mdi mdi-plus me-2"></i> Add user</a
               >
             </div>
@@ -66,15 +61,8 @@
               <tr>
                 <th scope="col" style="width: 50px">
                   <div class="form-check font-size-16">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="contacusercheck"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="contacusercheck"
-                    ></label>
+                    <input type="checkbox" class="form-check-input" id="contacusercheck" />
+                    <label class="form-check-label" for="contacusercheck"></label>
                   </div>
                 </th>
                 <th scope="col">Name</th>
@@ -88,15 +76,8 @@
               <tr>
                 <th scope="row">
                   <div class="form-check font-size-16">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="contacusercheck1"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="contacusercheck1"
-                    ></label>
+                    <input type="checkbox" class="form-check-input" id="contacusercheck1" />
+                    <label class="form-check-label" for="contacusercheck1"></label>
                   </div>
                 </th>
                 <td>
@@ -106,9 +87,7 @@
                     class="avatar-sm rounded-circle me-2"
                     onerror="this.onerror=null;this.src='/placeholder_user.jpg';"
                   />
-                  <a href="#" class="text-body">
-                    <%= users.surname %> <%= users.name %>
-                  </a>
+                  <a href="#" class="text-body"> <%= users.surname %> <%= users.name %> </a>
                 </td>
                 <td><%= users.role %></td>
                 <td><%= users.email %></td>
@@ -148,11 +127,7 @@
                     </li>
 
                     <li class="list-inline-item">
-                      <form
-                        id="deleteForm<%= users._id %>"
-                        method="post"
-                        action="/user/delete/<%= users._id %>"
-                      >
+                      <form id="deleteForm<%= users._id %>" method="post" action="/user/delete/<%= users._id %>">
                         <a
                           href="javascript:deleteUser('<%= users._id %>')"
                           id="deleteLink<%= users._id %>"
@@ -170,38 +145,7 @@
             </tbody>
           </table>
         </div>
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div>
-              <p class="mb-sm-0">Showing 1 to 10 of 12 entries</p>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="float-sm-end">
-              <ul class="pagination mb-sm-0">
-                <li class="page-item disabled">
-                  <a href="#" class="page-link"
-                    ><i class="mdi mdi-chevron-left"></i
-                  ></a>
-                </li>
-                <li class="page-item">
-                  <a href="#" class="page-link">1</a>
-                </li>
-                <li class="page-item active">
-                  <a href="#" class="page-link">2</a>
-                </li>
-                <li class="page-item">
-                  <a href="#" class="page-link">3</a>
-                </li>
-                <li class="page-item">
-                  <a href="#" class="page-link"
-                    ><i class="mdi mdi-chevron-right"></i
-                  ></a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <%- include('./../Partials/Pagination', { totalPages, currentPage, limit, page, pageName:'users' }) %>
       </div>
     </div>
   </div>

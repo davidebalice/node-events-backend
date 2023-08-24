@@ -44,6 +44,9 @@ exports.getAllSubcategories = catchAsync(async (req, res, next) => {
   const totalPages = Math.ceil(count / limit);
 
   let message = '';
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+
   if (req.query.m) {
     if (req.query.m === '1') {
       message = 'Subcategory added';
@@ -68,6 +71,7 @@ exports.getAllSubcategories = catchAsync(async (req, res, next) => {
       message,
       queryKey,
       queryCat,
+      flashMessage: flashMessage || null,
     });
   }
 });
@@ -86,7 +90,9 @@ exports.getSubcategoryByCatId = catchAsync(async (req, res, next) => {
 exports.addSubcategory = catchAsync(async (req, res, next) => {
   res.locals = { title: 'Add subcategory' };
   const categories = await Category.find().sort({ order: 1 });
-  res.render('Subcategories/add', { formData: '', message: '', categories });
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
+  res.render('Subcategories/add', { formData: '', message: '', categories, flashMessage: flashMessage || null });
 });
 
 exports.createSubcategory = catchAsync(async (req, res, next) => {
@@ -111,6 +117,8 @@ exports.deleteSubcategory = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+  const categories = await Category.find().sort({ order: 1 });
+  const flashMessage = req.session.flashMessage;
   res.redirect('/subcategories?m=2');
 });
 
@@ -118,12 +126,13 @@ exports.getSubcategory = factory.getOne(Subcategory, { path: 'reviews' });
 
 exports.editSubcategory = catchAsync(async (req, res, next) => {
   let query = await Subcategory.findById(req.params.id);
-
   const doc = await query;
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+  const categories = await Category.find().sort({ order: 1 });
+  const flashMessage = req.session.flashMessage;
 
   let message = '';
   res.render('Subcategories/edit', {
@@ -131,6 +140,8 @@ exports.editSubcategory = catchAsync(async (req, res, next) => {
     title: 'Edit subcategory',
     formData: doc,
     message: message,
+    categories,
+    flashMessage: flashMessage || null,
   });
 });
 

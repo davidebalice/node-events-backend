@@ -58,6 +58,7 @@
                 type="text"
                 value="<%= formData && formData.name ? formData.name : '' %>"
                 name="name"
+                required
               />
             </div>
           </div>
@@ -72,6 +73,7 @@
                 id="categorySelect"
                 name="category"
                 style="max-width: 200px"
+                required
               >
                 <option value="">- Select -</option>
                 <% for (let category of categories) { %>

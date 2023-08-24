@@ -94,6 +94,7 @@
                 value="<%= formData && formData.rating ? formData.rating : '' %>"
                 name="rating"
                 style="max-width: 150px"
+                required
               />
             </div>
           </div>
@@ -103,7 +104,7 @@
               Message<b style="color: red">*</b>
             </label>
             <div class="col-md-10">
-              <textarea id="ckeditor-classic" name="message">
+              <textarea id="ckeditor-classic" name="message" required>
                 <%= formData && formData.message ? formData.message : '' %></textarea
               >
             </div>
