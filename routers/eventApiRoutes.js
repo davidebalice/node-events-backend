@@ -6,7 +6,8 @@ const reviewRouter = require('./reviewRoutes');
 router.use('/:eventId/reviews', reviewRouter);
 router.route('/events').get(eventController.getAllEvents);
 
-router.route('/event/:id').get(eventController.getEvent);
+router.route('/event/slug/:slug').get(eventController.getEventBySlug);
+router.route('/event/id/:id').get(eventController.getEventById);
 
 router.route('/updatedatefordemo').get(eventController.updateDateForDemo);
 

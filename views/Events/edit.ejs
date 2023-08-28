@@ -129,12 +129,15 @@
               >
               <option value=""> - Select - </option>
               <% for (let subcategory of subcategories) { %>
-                <option value="<%= subcategory._id %>" <%= subcategory._id.toString() === formData.subcategory.toString() ? 'selected' : '' %>><%= subcategory.name %></option>
+                <option value="<%= subcategory._id %>"  <% if (subcategory._id && formData.subcategory && subcategory._id.toString() === formData.subcategory.toString()) { %>
+                  selected
+                <% } %>>
+                <%= subcategory.name %></option>
               <% } %>
               </select>
             </div>
           </div>
-          
+
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
               <b>Event title</b><b style="color:red">*</b>
@@ -145,6 +148,21 @@
                 type="text"
                 value="<%= formData && formData.name ? formData.name : '' %>"
                 name="name"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+             Price
+            </label>
+            <div class="col-md-10">
+              <input
+                class="form-control"
+                type="text"
+                value="<%= formData && formData.price ? formData.price : '' %>"
+                name="price"
                 required
               />
             </div>

@@ -22,11 +22,16 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
   } else {
     filterData = { active: true };
   }
-  const page = req.query.page * 1 || 1;
   const setLimit = 30;
   const limit = req.query.limit * 1 || setLimit;
+  const page = req.query.page * 1 || 1;
   const skip = (page - 1) * limit;
-  const events = await Event.find(filterData).sort('-createdAt').skip(skip).limit(limit);
+  const events = await Event.find(filterData)
+    .sort('-createdAt')
+    .skip(skip)
+    .limit(limit)
+    .populate('category', '_id name')
+    .populate('location', '_id description');
   const count = await Event.countDocuments();
   const totalPages = Math.ceil(count / limit);
   let message = '';
@@ -53,17 +58,33 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.getEvent = catchAsync(async (req, res, next) => {
-  const id = req.params.id;
-  const event = await Event.findOne({ _id: id, active: true });
-  const count = await Event.countDocuments();
+exports.getEventBySlug = catchAsync(async (req, res, next) => {
+  const slug = req.params.slug;
+  const event = await Event.findOne({ slug, active: true })
+    .populate('category', '_id name')
+    .populate('location', '_id description');
 
   if (event) {
     res.status(200).json({
-      status: 'success',
-      data: {
-        event,
-      },
+      event,
+    });
+  } else {
+    return res.status(404).json({
+      status: 'fail',
+      mesage: 'invalid id',
+    });
+  }
+});
+
+exports.getEventById = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const event = await Event.findOne({ _id: id, active: true })
+    .populate('category', '_id name')
+    .populate('location', '_id description');
+
+  if (event) {
+    res.status(200).json({
+      event,
     });
   } else {
     return res.status(404).json({

@@ -72,7 +72,11 @@ exports.getAllEvents = catchAsync(async (req, res, next) => {
   const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
   const skip = (page - 1) * limit;
-  const events = await Event.find(filterData).sort('-createdAt').skip(skip).limit(limit);
+  const events = await Event.find(filterData)
+    .sort('-createdAt')
+    .skip(skip)
+    .limit(limit)
+    .populate('category', '_id name');
   const count = await Event.countDocuments();
   const totalPages = Math.ceil(count / limit);
 
@@ -195,6 +199,12 @@ exports.editEvent = catchAsync(async (req, res, next) => {
 });
 
 exports.updateEvent = catchAsync(async (req, res, next) => {
+  const formData = req.body;
+
+  if (formData.subcategory === '') {
+    formData.subcategory = null;
+  }
+
   const doc = await Event.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -293,7 +303,7 @@ exports.updateLocation = catchAsync(async (req, res, next) => {
 
   let longitude = coordinates[0];
   let latitude = coordinates[1];
- 
+
   if (longitude === null || longitude === '' || longitude === NaN || longitude === undefined) {
     longitude = 0;
   }

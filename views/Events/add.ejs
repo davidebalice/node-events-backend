@@ -135,7 +135,7 @@
           
           <div class="mb-3 row">
             <label for="example-text-input" class="col-md-2 col-form-label">
-              Event title<b style="color: red">*</b>
+              <b>Event title</b><b style="color: red">*</b>
             </label>
             <div class="col-md-10">
               <input
@@ -143,6 +143,21 @@
                 type="text"
                 value="<%= formData && formData.name ? formData.name : '' %>"
                 name="name"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+             Price
+            </label>
+            <div class="col-md-10">
+              <input
+                class="form-control"
+                type="text"
+                value="<%= formData && formData.price ? formData.price : '' %>"
+                name="price"
                 required
               />
             </div>

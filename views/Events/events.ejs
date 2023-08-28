@@ -67,6 +67,7 @@
                 <th class="align-middle" style="width: 7%">Image</th>
                 <th class="align-middle" style="width: 15%">Event name</th>
                 <th class="align-middle" style="width: 15%">Date</th>
+                <th class="align-middle" style="width: 30%">Category</th>
                 <th class="align-middle" style="width: 30%">Location</th>
                 <th class="align-middle">Action</th>
               </tr>
@@ -94,6 +95,7 @@
                   <% if(event.typeDate === 'single'){ %> <%= event.formattedStart %> <% } else {%> <%=
                   event.formattedStart %> - <%= event.formattedEnd %> <%}%>
                 </td>
+                <td><%= event.category.name %></td>
                 <td><%= event.location.description %></td>
                 <td>
                   <div class="d-flex gap-1">

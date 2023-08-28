@@ -15,8 +15,9 @@ const eventSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
       required: true,
+      default: null,
     },
-    subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Subcategory' },
+    subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Subcategory'},
     slug: { type: String, unique: true, trim: true },
     ratingsAverage: {
       type: Number,
@@ -47,6 +48,10 @@ const eventSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
       select: false,
+    },
+    price: {
+      type: Number,
+      default: 0.0,
     },
     typeDate: {
       type: String,

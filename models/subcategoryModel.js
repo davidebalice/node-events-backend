@@ -12,6 +12,7 @@ const subcategorySchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
       required: [true, 'Subategory must have a category'],
+      default: null,
     },
     slug: { type: String, unique: true, trim: true },
     createdAt: {
