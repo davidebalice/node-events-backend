@@ -5740,5 +5740,12 @@ body[data-layout-mode='dark'] .gallery-box .box-content {
   margin-left: 216px;
   color: #fff;
   cursor: pointer;
-  margin-top:0px;
+  margin-top: 0px;
+}
+.deleteButton {
+  padding: 0px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 13px;
 }

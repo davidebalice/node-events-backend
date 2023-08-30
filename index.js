@@ -95,14 +95,18 @@ const userRouter = require('./routers/userRoutes');
 const reviewRouter = require('./routers/reviewRoutes');
 const categoryRouter = require('./routers/categoryRoutes');
 const subcategoryRouter = require('./routers/subcategoryRoutes');
+const bookingRouter = require('./routers/bookingRoutes');
 const eventApiRouter = require('./routers/eventApiRoutes');
+const bookingApiRouter = require('./routers/bookingApiRoutes');
 
 app.use('/api/v1/', eventApiRouter);
+app.use('/api/v1/', bookingApiRouter);
 app.use('/', eventRouter);
 app.use('/', userRouter);
 app.use('/', reviewRouter);
 app.use('/', categoryRouter);
 app.use('/', subcategoryRouter);
+app.use('/', bookingRouter);
 
 http.listen(8000, function () {
   console.log('listening on *:8000');

@@ -1,0 +1,144 @@
+<%- contentFor('HeaderCss') %> <%- contentFor('breadcrumb') %>
+
+<div class="row">
+  <div class="col-12">
+    <div
+      class="page-title-box d-flex align-items-center justify-content-between"
+    >
+      <h4 class="mb-0">Edit booking</h4>
+
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item">
+            <a href="javascript:void(0);">Bookings</a>
+          </li>
+          <li class="breadcrumb-item active">Edit booking</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include ('../Partials/FlashMessage') %>
+
+<%- contentFor('body') %> <% if (message && message.length > 0) { %>
+<ul class="errors">
+  <%= message %>
+</ul>
+<% } %>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <a href="/bookings" class="back-button">
+          <button
+            type="button"
+            class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+          >
+            <i
+              class="mdi mdi-arrow-left-thick me-1"
+              style="font-size: 14px"
+            ></i>
+            Back
+          </button>
+        </a>
+      </div>
+
+      <form method="post" action="/booking/<%= formData._id %>">
+        <div class="card-body">
+          
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Date
+            </label>
+            <div class="col-md-10">
+              <b
+                ><%= formData && formData.createdAt ? formData.createdAt : '' %>
+              </b>
+            </div>
+          </div>
+          
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Event
+            </label>
+            <div class="col-md-10">
+              <b><%= formData && formData.event.name ? formData.event.name : '' %></b>
+            </div>
+          </div>
+          <% if (formData.user) { %>
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+             User
+            </label>
+            <div class="col-md-10">
+              <b><%= formData && formData.user.name ? formData.user.name : '' %> <%= formData && formData.user.surname ? formData.user.surname : '' %></b>
+            </div>
+          </div>
+         <%}%>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Total €<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <input class="form-control" style="max-width:250px" type="text" value="<%= formData && formData.total ? formData.total : '' %>" name="total" required />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Qty<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <input
+                class="form-control"
+                type="number"
+                value="<%= formData && formData.qty ? formData.qty : '' %>"
+                name="qty"
+                required
+                style="max-width:250px"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Paid<b style="color:red">*</b>
+            </label>
+            <div class="col-md-10">
+              <select class="form-select" name="paid" required style="max-width:250px">
+                <option>- Select -</option>
+                <option value="true" <%= formData && formData.paid === true ? ' selected ' : '' %>>Paid</option>
+                <option value="false" <%= formData && formData.paid === false ? ' selected ' : '' %>>Not paid</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+              Note
+            </label>
+            <div class="col-md-10">
+              <textarea id="ckeditor-classic" name="note"><%= formData && formData.note ? formData.note : '' %></textarea>
+            </div>
+          </div>
+
+          <div class="mt-4 row">
+            <label for="example-text-input" class="col-md-2 col-form-label">
+            </label>
+            <div class="col-md-10">
+              <button type="submit" class="btn btn-primary w-md">Save</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+<script src="/assets/js/pages/form-editor.init.js"></script>
+
+<%- contentFor('FooterJs') %> <%- contentFor('BottomJs') %>
