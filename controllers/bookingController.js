@@ -47,6 +47,7 @@ exports.getAllBookings = catchAsync(async (req, res, next) => {
       bookings: bookings.map((booking) => ({
         ...booking.toObject(),
         createdAt: moment(booking.createdAt).format('DD/MM/YYYY HH:mm'),
+        date: moment(booking.date).format('DD/MM/YYYY'),
       })),
       currentPage: page,
       page,
@@ -68,6 +69,7 @@ exports.editBooking = catchAsync(async (req, res, next) => {
   }
 
   const formattedDate = moment(doc.createdAt).format('DD/MM/YYYY HH:mm');
+  const formattedDateEvent = moment(doc.date).format('DD/MM/YYYY');
 
   let message = '';
   const flashMessage = req.session.flashMessage;
@@ -79,6 +81,7 @@ exports.editBooking = catchAsync(async (req, res, next) => {
     formData: {
       ...doc.toObject(),
       createdAt: formattedDate,
+      date: formattedDateEvent,
     },
     message: message,
     flashMessage: flashMessage || null,

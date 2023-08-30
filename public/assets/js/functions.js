@@ -28,6 +28,12 @@ const deleteReview = (id) => {
   }
 };
 
+const deleteBooking = (id) => {
+  if (confirm('Delete this booking?')) {
+    document.getElementById('deleteForm' + id).submit();
+  }
+};
+
 const removeMessage = (classeDiv, delay) => {
   setTimeout(() => {
     const div = document.querySelector(`.${classeDiv}`);

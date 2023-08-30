@@ -61,9 +61,9 @@
                     <label class="form-check-label" for="checkAll"></label>
                   </div>
                 </th>
-                <th class="align-middle" style="width: 7%">Date</th>
+                <th class="align-middle" style="width: 7%">Date booking</th>
                 <th class="align-middle" style="width: 7%">Image</th>
-                <th class="align-middle" style="width: 15%">Event</th>
+                <th class="align-middle" style="width: 15%">Event and date</th>
                 <th class="align-middle" style="width: 15%">User</th>
                 <th class="align-middle" style="width: 10%">Unit price</th>
                 <th class="align-middle" style="width: 10%">Qty</th>
@@ -88,7 +88,11 @@
                     onerror="this.onerror=null;this.src='/placeholder.jpg';"
                   />
                 </td>
-                <td><b><%= booking.event.name %></b></td>
+                <td>
+                  <b><%= booking.event.name %></b>
+                  <br />
+                  <%= booking.date %>
+                </td>
                 <% if (booking.user) { %>
                 <td>
                   <b><%= booking.user.name %> <%= booking.user.surname %></b><br />
@@ -102,8 +106,10 @@
                 </td>
                 <% } %>
                 <td>€ <%= booking.event.price.toFixed(2) %></td>
-                <td>€ <%= booking.qty %></td>
-                <td>€ <%= booking.total.toFixed(2) %></td>
+                <td><%= booking.qty %></td>
+                <td>
+                  € <%= booking.total.toFixed(2) %> <% if (booking.paid) { %> Paid <% } else { %> Not paid <% } %>
+                </td>
 
                 <td>
                   <div class="d-flex gap-1">
@@ -126,7 +132,7 @@
                           action="/booking/delete/<%= booking._id %>"
                         >
                           <a
-                            href="javascript:deleteTour('<%= booking._id %>')"
+                            href="javascript:deleteBooking('<%= booking._id %>')"
                             id="deleteLink<%= booking._id %>"
                             data-toggle="tooltip"
                             data-placement="top"
