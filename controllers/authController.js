@@ -1,8 +1,6 @@
 const { promisify } = require('util');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
-const ApiQuery = require('../middlewares/apiquery');
 const catchAsync = require('../middlewares/catchAsync');
 const AppError = require('../middlewares/error');
 const Email = require('../middlewares/email');

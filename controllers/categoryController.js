@@ -1,14 +1,9 @@
 const multer = require('multer');
-const mongoose = require('mongoose');
 const sharp = require('sharp');
 const Category = require('../models/categoryModel');
-const ApiQuery = require('../middlewares/apiquery');
 const AppError = require('../middlewares/error');
 const catchAsync = require('../middlewares/catchAsync');
 const factory = require('./handlerFactory');
-const fs = require('fs');
-const path = require('path');
-const { ObjectId } = require('mongodb');
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -94,6 +89,8 @@ exports.addCategory = catchAsync(async (req, res, next) => {
 
 exports.createCategory = catchAsync(async (req, res, next) => {
   try {
+    const flashMessage = req.session.flashMessage;
+    req.session.flashMessage = null;
     await Category.create(req.body);
     res.redirect('/categories?m=1');
   } catch (err) {
@@ -149,6 +146,8 @@ exports.updateCategory = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.redirect(doc._id);
 });
 
@@ -179,7 +178,8 @@ exports.updatePhoto = catchAsync(async (req, res, next) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
-
+  const flashMessage = req.session.flashMessage;
+  req.session.flashMessage = null;
   res.redirect('/category/photo/' + doc._id);
 });
 

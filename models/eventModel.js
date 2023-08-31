@@ -17,7 +17,20 @@ const eventSchema = new mongoose.Schema(
       required: true,
       default: null,
     },
-    subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Subcategory'},
+    subcategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Subcategory',
+      validate: {
+        validator: function (value) {
+          // Verifica solo se il valore è un ObjectId valido se è diverso da null
+          if (value !== null && typeof value === 'string' && value.trim().length > 0) {
+            return mongoose.Types.ObjectId.isValid(value);
+          }
+          return true; // Consenti valori null e valori vuoti o non definiti
+        },
+        message: 'Invalid subcategory value',
+      },
+    },
     slug: { type: String, unique: true, trim: true },
     ratingsAverage: {
       type: Number,

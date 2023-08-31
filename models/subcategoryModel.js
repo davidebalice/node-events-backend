@@ -6,7 +6,6 @@ const subcategorySchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'Subcategory must have a name'],
-      unique: true,
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,7 +13,7 @@ const subcategorySchema = new mongoose.Schema(
       required: [true, 'Subategory must have a category'],
       default: null,
     },
-    slug: { type: String, unique: true, trim: true },
+    slug: { type: String, trim: true },
     createdAt: {
       type: Date,
       default: Date.now(),

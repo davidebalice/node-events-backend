@@ -107,8 +107,12 @@
                 <% } %>
                 <td>€ <%= booking.event.price.toFixed(2) %></td>
                 <td><%= booking.qty %></td>
-                <td>
-                  € <%= booking.total.toFixed(2) %> <% if (booking.paid) { %> Paid <% } else { %> Not paid <% } %>
+                <td class="priceTd">
+                  <b class="price"> € <%= booking.total.toFixed(2) %></b> <% if (booking.paid) { %>
+                  <p class="paidButton paid">Paid</p>
+                  <% } else { %>
+                  <p class="paidButton notPaid">Not paid</p>
+                  <% } %>
                 </td>
 
                 <td>

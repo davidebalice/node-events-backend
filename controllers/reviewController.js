@@ -1,15 +1,9 @@
-const mongoose = require('mongoose');
 const moment = require('moment');
-const sharp = require('sharp');
 const Review = require('../models/reviewModel');
-const Event = require('../models/eventModel');
 const factory = require('./handlerFactory');
 const AppError = require('../middlewares/error');
 const catchAsync = require('../middlewares/catchAsync');
-const ApiQuery = require('../middlewares/apiquery');
-const fs = require('fs');
-const path = require('path');
-const { ObjectId } = require('mongodb');
+
 
 exports.setEventUserIds = (req, res, next) => {
   if (!req.body.event) req.body.event_id = req.params.eventId;

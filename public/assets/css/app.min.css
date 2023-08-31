@@ -5749,3 +5749,27 @@ body[data-layout-mode='dark'] .gallery-box .box-content {
   align-items: center;
   font-size: 13px;
 }
+.paidButton {
+  background-color: #0d950d;
+  width: 60px;
+  padding: 2px;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  margin-top: 18px;
+  border-radius: 6px;
+}
+.paidButton {
+  background-color: #0d950d;
+}
+.notPaid {
+  background-color: #ff0000;
+}
+.price {
+  font-size: 17px;
+}
+.priceTd {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

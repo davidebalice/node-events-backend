@@ -1,13 +1,5 @@
-const multer = require('multer');
-const mongoose = require('mongoose');
-const sharp = require('sharp');
 const Event = require('../models/eventModel');
-const ApiQuery = require('../middlewares/apiquery');
-const AppError = require('../middlewares/error');
 const catchAsync = require('../middlewares/catchAsync');
-const factory = require('./handlerFactory');
-const fs = require('fs');
-const path = require('path');
 const { parseISO, format, startOfMonth, endOfMonth } = require('date-fns');
 
 exports.getAllEvents = catchAsync(async (req, res, next) => {

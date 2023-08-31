@@ -4,13 +4,11 @@ const sharp = require('sharp');
 const Event = require('../models/eventModel');
 const Category = require('../models/categoryModel');
 const Subcategory = require('../models/subcategoryModel');
-const ApiQuery = require('../middlewares/apiquery');
 const AppError = require('../middlewares/error');
 const catchAsync = require('../middlewares/catchAsync');
 const factory = require('./handlerFactory');
 const fs = require('fs');
 const path = require('path');
-const { ObjectId } = require('mongodb');
 const multerStorage = multer.memoryStorage();
 const { parseISO, format, startOfMonth, endOfMonth } = require('date-fns');
 
@@ -137,12 +135,15 @@ exports.createEvent = catchAsync(async (req, res, next) => {
     res.redirect('/events?m=1');
   } catch (err) {
     const categories = await Category.find().sort({ order: 1 });
+    const flashMessage = req.session.flashMessage;
+    req.session.flashMessage = null;
     res.render('Events/add', {
       status: 200,
       title: 'Add event',
       formData: req.body,
       message: err.message,
       categories,
+      flashMessage: flashMessage || null,
     });
   }
 });

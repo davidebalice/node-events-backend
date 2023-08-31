@@ -1,14 +1,6 @@
-const multer = require('multer');
-const mongoose = require('mongoose');
-const sharp = require('sharp');
 const Booking = require('../models/bookingModel');
-const ApiQuery = require('../middlewares/apiquery');
 const AppError = require('../middlewares/error');
 const catchAsync = require('../middlewares/catchAsync');
-const factory = require('./handlerFactory');
-const fs = require('fs');
-const path = require('path');
-const { ObjectId } = require('mongodb');
 const moment = require('moment');
 
 exports.getAllBookings = catchAsync(async (req, res, next) => {
