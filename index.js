@@ -98,9 +98,11 @@ const subcategoryRouter = require('./routers/subcategoryRoutes');
 const bookingRouter = require('./routers/bookingRoutes');
 const eventApiRouter = require('./routers/eventApiRoutes');
 const bookingApiRouter = require('./routers/bookingApiRoutes');
+const categoryApiRouter = require('./routers/categoryApiRoutes');
 
 app.use('/api/v1/', eventApiRouter);
 app.use('/api/v1/', bookingApiRouter);
+app.use('/api/v1/', categoryApiRouter);
 app.use('/', eventRouter);
 app.use('/', userRouter);
 app.use('/', reviewRouter);

@@ -18,8 +18,8 @@ yarn-error.log
 /.vscode
 *.env
 *.txt
+config.env
 config.php
-config*.*
 *.jpg
 *.png
 *.jpeg

@@ -3,17 +3,23 @@ const catchAsync = require('../middlewares/catchAsync');
 const { parseISO, format, startOfMonth, endOfMonth } = require('date-fns');
 
 exports.getAllEvents = catchAsync(async (req, res, next) => {
-  let filterData = {};
+  let filterData = { active: true };
 
   if (req.query.key) {
     const regex = new RegExp(req.query.key, 'i');
-    filterData = {
-      name: { $regex: regex },
-      active: true,
-    };
-  } else {
-    filterData = { active: true };
+    filterData.name = { $regex: regex };
   }
+
+  if (req.query.category) {
+    filterData.category = req.query.category;
+  }
+
+  if (req.query.startDate && req.query.endDate) {
+    const startDate = new Date(req.query.startDate);
+    const endDate = new Date(req.query.endDate);
+    filterData.startDate = { $gte: startDate, $lte: endDate };
+  }
+
   const setLimit = 30;
   const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
