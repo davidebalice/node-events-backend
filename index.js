@@ -10,6 +10,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE;
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 app.use(
   cors({
@@ -96,19 +97,23 @@ const reviewRouter = require('./routers/reviewRoutes');
 const categoryRouter = require('./routers/categoryRoutes');
 const subcategoryRouter = require('./routers/subcategoryRoutes');
 const bookingRouter = require('./routers/bookingRoutes');
+const messageRouter = require('./routers/messageRoutes');
 const eventApiRouter = require('./routers/eventApiRoutes');
 const bookingApiRouter = require('./routers/bookingApiRoutes');
 const categoryApiRouter = require('./routers/categoryApiRoutes');
+const messageApiRouter = require('./routers/messageApiRoutes');
 
 app.use('/api/v1/', eventApiRouter);
 app.use('/api/v1/', bookingApiRouter);
 app.use('/api/v1/', categoryApiRouter);
+app.use('/api/v1/', messageApiRouter);
 app.use('/', eventRouter);
 app.use('/', userRouter);
 app.use('/', reviewRouter);
 app.use('/', categoryRouter);
 app.use('/', subcategoryRouter);
 app.use('/', bookingRouter);
+app.use('/', messageRouter);
 
 http.listen(8000, function () {
   console.log('listening on *:8000');
