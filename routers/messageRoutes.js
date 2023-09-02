@@ -10,7 +10,7 @@ router
 
 router
   .route('/message/:id')
-  .get(authController.protect, authController.restrictTo('admin'), messageController.editMessage)
+  .get(authController.protect, authController.restrictTo('admin'), messageController.detailMessage)
   .post(demoMode, authController.protect, authController.restrictTo('admin'), messageController.updateMessage);
 
 router

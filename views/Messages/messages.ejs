@@ -3,14 +3,14 @@
 <div class="row">
   <div class="col-12">
     <div class="page-title-box d-flex align-items-center justify-content-between">
-      <h4 class="mb-0">Bookings</h4>
+      <h4 class="mb-0"><%=translation.Messages%></h4>
 
       <div class="page-title-right">
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">
-            <a href="javascript: void(0);">Bookings</a>
+            <a href="javascript: void(0);"><%=translation.Messages%></a>
           </li>
-          <li class="breadcrumb-item active">Bookings</li>
+          <li class="breadcrumb-item active"><%=translation.Messages%></li>
         </ol>
       </div>
     </div>
@@ -31,7 +31,7 @@
           <div class="col-sm-4">
             <div class="search-box me-2 mb-2 d-inline-block">
               <div class="position-relative">
-                <form method="get" action="/bookings" class="row flex-row flex-nowrap">
+                <form method="get" action="/messages" class="row flex-row flex-nowrap">
                   <input
                     type="text"
                     class="form-control col-8 inputSearch"
@@ -61,18 +61,15 @@
                     <label class="form-check-label" for="checkAll"></label>
                   </div>
                 </th>
-                <th class="align-middle" style="width: 7%">Date booking</th>
-                <th class="align-middle" style="width: 7%">Image</th>
-                <th class="align-middle" style="width: 15%">Event and date</th>
-                <th class="align-middle" style="width: 15%">User</th>
-                <th class="align-middle" style="width: 10%">Unit price</th>
-                <th class="align-middle" style="width: 10%">Qty</th>
-                <th class="align-middle" style="width: 10%">Total</th>
+                <th class="align-middle" style="width: 10%">Date message</th>
+                <th class="align-middle" style="width: 30%">Name</th>
+                <th class="align-middle" style="width: 30%">Email</th>
+                <th class="align-middle" style="width: 20%">Read</th>
                 <th class="align-middle">Action</th>
               </tr>
             </thead>
             <tbody>
-              <%- contentFor('body') %> <% bookings.forEach(function(booking) { %>
+              <%- contentFor('body') %> <% messages.forEach(function(message) { %>
               <tr>
                 <td>
                   <div class="form-check font-size-16">
@@ -80,64 +77,48 @@
                     <label class="form-check-label" for="orderidcheck01"></label>
                   </div>
                 </td>
-                <td><b><%= booking.createdAt %></b></td>
+                <td><b><%= message.createdAt %></b></td>
+           
                 <td>
-                  <img
-                    src="<%= process.env.NODE_URL %>/assets/images/events/<%= booking.event.imageCover %>"
-                    style="width: 120px; height: auto"
-                    onerror="this.onerror=null;this.src='/placeholder.jpg';"
-                  />
-                </td>
-                <td>
-                  <b><%= booking.event.name %></b>
-                  <br />
-                  <%= booking.date %>
-                </td>
-                <% if (booking.user) { %>
-                <td>
-                  <b><%= booking.user.name %> <%= booking.user.surname %></b><br />
-                  <%= booking.user.email %>
-                </td>
-                <% } else { %>
-                <td>
-                  <b><%= booking.firstName %> <%= booking.lastName %></b><br />
-                  <%= booking.email %><br />
-                  <%= booking.phone %>
-                </td>
-                <% } %>
-                <td>€ <%= booking.event.price.toFixed(2) %></td>
-                <td><%= booking.qty %></td>
-                <td class="priceTd">
-                  <b class="price"> € <%= booking.total.toFixed(2) %></b> <% if (booking.paid) { %>
-                  <p class="paidButton paid">Paid</p>
-                  <% } else { %>
-                  <p class="paidButton notPaid">Not paid</p>
-                  <% } %>
+                  <b><%= message.name %> 
                 </td>
 
+                <td>
+                  <%= message.from %>
+                </td>
+
+                <td>
+                  <% if (message.read) { %>
+                    Yes
+                  <% } else { %>
+                    No
+                  <% } %>
+                  
+                </td>
+              
                 <td>
                   <div class="d-flex gap-1">
                     <ul class="list-inline mb-0">
                       <li class="list-inline-item">
                         <a
-                          href="/booking/<%= booking._id %>"
+                          href="/message/<%= message._id %>"
                           class="px-2 text-primary"
                           data-toggle="tooltip"
                           data-placement="top"
-                          title="Edit"
-                          ><i class="bx bx-pencil font-size-22"></i
+                          title="Detail"
+                          ><i class="bx bx-detail font-size-22"></i
                         ></a>
                       </li>
 
                       <li class="list-inline-item">
                         <form
-                          id="deleteForm<%= booking._id %>"
+                          id="deleteForm<%= message._id %>"
                           method="post"
-                          action="/booking/delete/<%= booking._id %>"
+                          action="/message/delete/<%= message._id %>"
                         >
                           <a
-                            href="javascript:deleteBooking('<%= booking._id %>')"
-                            id="deleteLink<%= booking._id %>"
+                            href="javascript:deleteMessage('<%= message._id %>')"
+                            id="deleteLink<%= message._id %>"
                             data-toggle="tooltip"
                             data-placement="top"
                             title="Delete"
@@ -153,7 +134,7 @@
             </tbody>
           </table>
         </div>
-        <%- include('./../Partials/Pagination', { totalPages, currentPage, limit, page, pageName:'bookings' }) %>
+        <%- include('./../Partials/Pagination', { totalPages, currentPage, limit, page, pageName:'messages' }) %>
       </div>
     </div>
   </div>

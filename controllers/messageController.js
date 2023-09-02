@@ -94,8 +94,8 @@ exports.updateMessage = catchAsync(async (req, res, next) => {
   const flashMessage = req.session.flashMessage;
   req.session.flashMessage = null;
 
-  res.render('Messages/edit', {
-    title: 'Edit tour',
+  res.render('Messages/detail', {
+    title: 'Detail message',
     formData: doc,
     DEMO_MODE: process.env.DEMO_MODE,
     message: req.flash('message'),

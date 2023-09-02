@@ -97,7 +97,7 @@ exports.updateBooking = catchAsync(async (req, res, next) => {
   req.session.flashMessage = null;
 
   res.render('Bookings/edit', {
-    title: 'Edit tour',
+    title: 'Edit booking',
     formData: doc,
     DEMO_MODE: process.env.DEMO_MODE,
     message: req.flash('message'),
