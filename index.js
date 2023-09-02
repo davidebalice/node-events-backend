@@ -11,6 +11,8 @@ dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE;
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const Message = require('./models/messageModel');
+const moment = require('moment');
 
 app.use(
   cors({
@@ -82,8 +84,25 @@ app.use('/', authRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(async (req, res, next) => {
+  try {
+    const notifications = await Message.find({ read: false }).limit(2);
+    const formattedNotifications = notifications.map((notification) => {
+      return {
+        ...notification.toObject(),
+        createdAt: moment(notification.createdAt).format('DD/MM/YYYY HH:mm'),
+      };
+    });
+    res.locals.notifications = formattedNotifications;
+    next();
+  } catch (err) {
+    console.error('Error:', err);
+    next(err);
+  }
+});
+
 app.get('/layouts/', function (req, res) {
-  res.render('view');
+  res.render('view', { notifications: formattedNotifications });
 });
 
 var expressLayouts = require('express-ejs-layouts');

@@ -49,7 +49,7 @@ exports.getAllMessages = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.editMessage = catchAsync(async (req, res, next) => {
+exports.detailMessage = catchAsync(async (req, res, next) => {
   let query = await Message.findById(req.params.id);
 
   const doc = await query;
@@ -58,6 +58,12 @@ exports.editMessage = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
 
+  if (!doc.read) {
+    doc.read = true;
+    await doc.save();
+  }
+
+
   const formattedDate = moment(doc.createdAt).format('DD/MM/YYYY HH:mm');
   const formattedDateEvent = moment(doc.date).format('DD/MM/YYYY');
 
@@ -65,9 +71,9 @@ exports.editMessage = catchAsync(async (req, res, next) => {
   const flashMessage = req.session.flashMessage;
   req.session.flashMessage = null;
 
-  res.render('Message/edit', {
+  res.render('Messages/detail', {
     status: 200,
-    title: 'Edit message',
+    title: 'Detail message',
     formData: {
       ...doc.toObject(),
       createdAt: formattedDate,
